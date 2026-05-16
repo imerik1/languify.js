@@ -1,4 +1,5 @@
 name: Check Pull Request
+run-name: ${{ github.run_number }} - ${{ github.actor }} - ${{ github.head_ref }}
 
 on:
   push:
@@ -12,6 +13,7 @@ on:
 
 jobs:
   check-pull-request:
+    name: Checking pull request
     runs-on: ubuntu-latest
 
     steps:
@@ -29,14 +31,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Format
+        run: pnpm format:ci
+
       - name: Run test
         run: pnpm test:coverage
 
       - name: Build library
         run: pnpm lib:build
-
-      - name: Format
-        run: pnpm format:ci
 
       - name: Build documentation
         run: pnpm docs:build
