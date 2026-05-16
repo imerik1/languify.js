@@ -24,13 +24,18 @@
   "scripts": {
     "format": "biome format --write",
     "format:ci": "biome ci",
+
     "lib:build": "cross-env NODE_ENV=production tsup",
-    "lib:test": "cross-env NODE_ENV=development vitest",
-    "lib:test:watch": "cross-env NODE_ENV=development vitest --watch",
-    "prelib:test:coverage": "cross-env NODE_ENV=development rimraf dist/coverage",
-    "lib:test:coverage": "cross-env NODE_ENV=development vitest --coverage",
-    "postlib:test:coverage": "cross-env NODE_ENV=development rsync -a dist/coverage/v*/ dist/coverage/latest/",
+
+    "test": "cross-env NODE_ENV=development vitest",
+    "test:watch": "cross-env NODE_ENV=development vitest --watch",
+
+    "pretest:coverage": "cross-env NODE_ENV=development rimraf dist/coverage",
+    "test:coverage": "cross-env NODE_ENV=development vitest --coverage",
+    "posttest:coverage": "cross-env NODE_ENV=development rsync -a dist/coverage/v*/ dist/coverage/latest/",
+
     "docs:dev": "cross-env NODE_ENV=development vitepress dev src",
+
     "predocs:build": "cross-env NODE_ENV=development rimraf dist/docs",
     "docs:build": "cross-env NODE_ENV=production vitepress build src",
     "postdocs:build": "cross-env NODE_ENV=production LATEST_VERSION=latest vitepress build src"
