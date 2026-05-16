@@ -27,19 +27,19 @@ export class Result<T, E> {
     return other;
   }
 
-  static async of<T, E>(execution: Promise<T>): Promise<Result<T | null, E>> {
+  static ok<T, E>(value: T) {
+    return Result.of<T, E>(Promise.resolve(value));
+  }
+
+  static error<T, E>(value: E) {
+    return Result.of<T, E>(Promise.reject(value));
+  }
+
+  private static async of<T, E>(execution: Promise<T>): Promise<Result<T | null, E>> {
     try {
       return new Result<T, E>(await execution, null);
     } catch (err) {
       return new Result<T, E>(null, err as E);
     }
-  }
-
-  static ok<T>(value: T) {
-    return Result.of(Promise.resolve(value));
-  }
-
-  static error<T>(value: T) {
-    return Result.of(Promise.reject(value));
   }
 }

@@ -20,24 +20,6 @@ Err<E>  // error value
 
 ## 📦 Creating a Result
 
-### Result.of()
-
-Use `Result.of()` to safely wrap async operations.
-
-```ts
-import { Result } from "languify.js/rust";
-
-const response = await Result.of(
-  Promise.resolve("hello")
-);
-```
-
-If the promise resolves, the result contains `Ok`.
-
-If the promise rejects, the result contains `Err`.
-
-## ⚡ Creating results directly
-
 ### Result.ok()
 
 Creates a successful `Result`.
@@ -45,7 +27,7 @@ Creates a successful `Result`.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.ok("hello");
+const response = await Result.ok<string, Error>("hello");
 
 console.log(response.unwrap()); // "hello"
 ```
@@ -69,9 +51,7 @@ You can safely handle both success and failure cases using `match`.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.of(
-  Promise.resolve("world")
-);
+const response = await Result.ok<string, Error>("world");
 
 const message = response.match({
   Ok: (value) => `Hello ${value}`,
@@ -90,9 +70,7 @@ When the promise fails, `Err` receives the error value.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.of(
-  Promise.reject("failure")
-);
+const response = await Result.error<string, string>("failure");
 
 const message = response.match({
   Ok: () => "success",
@@ -141,9 +119,7 @@ import { Result } from "languify.js/rust";
 
 const error = new Error("failure");
 
-const response = await Result.of(
-  Promise.reject(error)
-);
+const response = await Result.error<string, Error>(error);
 
 const message = response.match({
   Ok: () => "success",
@@ -160,9 +136,7 @@ console.log(message); // Error("failure")
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.of(
-  Promise.resolve(5)
-);
+const response = await Result.ok<number, Error>(5);
 
 const value = response.match({
   Ok: (value) => value + 5,
@@ -179,9 +153,7 @@ Resolved `null` values are treated as `Err`.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.of(
-  Promise.resolve(null)
-);
+const response = await Result.ok<null, Error>(null);
 
 const value = response.match({
   Ok: () => "success",
@@ -200,9 +172,7 @@ Returns the inner value of `Ok`.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.of(
-  Promise.resolve("test")
-);
+const response = await Result.ok<string, Error>("test");
 
 console.log(response.unwrap()); // "test"
 ```
@@ -228,9 +198,7 @@ Returns a fallback value when the result is `Err`.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.of(
-  Promise.reject("failure")
-);
+const response = await Result.error<string, string>("failure");
 
 const value = response.unwrapOr("fallback");
 
@@ -244,9 +212,7 @@ If the result is `Ok`, the original value is returned.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.of(
-  Promise.resolve("test")
-);
+const response = await Result.ok<string, Error>("test");
 
 const value = response.unwrapOr("other");
 
@@ -259,7 +225,6 @@ console.log(value); // "test"
 * Prefer `match()` over manual error handling
 * `Ok` always represents success
 * `Err` always represents failure
-* `Result.of()` automatically converts rejected promises into `Err`
 * `unwrap()` throws when the result is `Err`
 * `unwrapOr()` provides safe fallback values
 * Resolved `null` values are treated as `Err`
@@ -305,9 +270,7 @@ You can also use the standalone `match()` helper.
 ```ts
 import { match, Result } from "languify.js/rust";
 
-const response = await Result.of(
-  Promise.resolve("test")
-);
+const response = await Result.ok<string, Error>("test");
 
 const value = match(response, {
   Ok: (value) => value.toUpperCase(),

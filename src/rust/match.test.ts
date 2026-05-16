@@ -3,7 +3,7 @@ import * as rust from ".";
 describe("rust:match", () => {
   describe("Option", () => {
     it("should match Some", () => {
-      const result = rust.match(rust.Some.of("test"), {
+      const result = rust.match(rust.Some("test"), {
         Some: (value) => value.toUpperCase(),
         None: () => "test",
       });
@@ -12,7 +12,7 @@ describe("rust:match", () => {
     });
 
     it("should match None", () => {
-      const result = rust.match(rust.None.of(), {
+      const result = rust.match(rust.None, {
         Some: () => "has_value",
         None: () => "empty",
       });
@@ -23,7 +23,7 @@ describe("rust:match", () => {
 
   describe("Result", () => {
     it("should match ok", async () => {
-      const result = rust.match(await rust.Result.of(Promise.resolve("test")), {
+      const result = rust.match(await rust.Result.ok("test"), {
         Ok: (value) => value,
         Err: (_) => null,
       });
@@ -32,7 +32,7 @@ describe("rust:match", () => {
     });
 
     it("should match err", async () => {
-      const result = rust.match(await rust.Result.of(Promise.reject("test")), {
+      const result = rust.match(await rust.Result.error("test"), {
         Ok: (value) => value,
         Err: (err) => err,
       });

@@ -30,7 +30,7 @@ After installation, you can import utilities from the package:
 ```ts
 import { Some, None, match } from "languify.js/rust";
 
-const value = Some.of("hello world");
+const value = Some("hello world");
 
 const result = match(value, {
   Some: (v) => v.toUpperCase(),

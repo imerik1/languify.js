@@ -29,7 +29,7 @@ Instead of asking “how does Rust do this?” or “how does Go do this?”, la
 ```ts
 import { Some, None, match } from "languify.js/rust";
 
-const value = Some.of("languify");
+const value = Some("languify");
 
 const result = match(value, {
   Some: (v) => v.toUpperCase(),

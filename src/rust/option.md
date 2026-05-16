@@ -20,22 +20,22 @@ None     // represents absence
 
 ### Some
 
-Use `Some.of(value)` to wrap an existing value.
+Use `Some(value)` to wrap an existing value.
 
 ```ts
 import { Some } from "languify.js/rust";
 
-const value = Some.of("hello");
+const value = Some("hello");
 ```
 
 ### None
 
-Use `None.of()` to represent absence.
+Use `None` to represent absence.
 
 ```ts
 import { None } from "languify.js/rust";
 
-const value = None.of();
+const value = None;
 ```
 
 ## 🔄 Matching values
@@ -45,7 +45,7 @@ You can safely handle both cases using `match`.
 ```ts
 import { Some } from "languify.js/rust";
 
-const result = Some.of("world").match({
+const result = Some("world").match({
   Some: (value) => `Hello ${value}`,
   None: () => "Nothing here"
 });
@@ -62,7 +62,7 @@ Returns the inner value from `Some`.
 ```ts
 import { Some } from "languify.js/rust";
 
-const value = Some.of("test");
+const value = Some("test");
 
 console.log(value.unwrap()); // "test"
 ```
@@ -71,14 +71,14 @@ console.log(value.unwrap()); // "test"
 
 ## 🔁 Fallback values
 
-### orElse()
+### unwrapOr()
 
 Returns a fallback value when the option is `None`.
 
 ```ts
 import { None } from "languify.js/rust";
 
-const value = None.of().orElse("fallback");
+const value = None.unwrapOr("fallback");
 
 console.log(value); // "fallback"
 ```
@@ -98,10 +98,10 @@ import { Some, None } from "languify.js/rust";
 
 function getUser(name: string) {
   if (name === "test") {
-    return Some.of(name);
+    return Some(name);
   }
 
-  return None.of();
+  return None;
 }
 
 const user = getUser("test");
@@ -121,7 +121,7 @@ You can also use the standalone `match()` helper.
 ```ts
 import { match, Some } from "languify.js/rust";
 
-const value = match(Some.of("test"), {
+const value = match(Some("test"), {
   Some: (value) => value.toUpperCase(),
   None: () => "EMPTY"
 });

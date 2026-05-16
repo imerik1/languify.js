@@ -30,7 +30,7 @@ Use `match()` with `Some` and `None`.
 ```ts
 import { match, Some } from "languify.js/rust";
 
-const value = Some.of("hello");
+const value = Some("hello");
 
 const result = match(value, {
   Some: (value) => value.toUpperCase(),
@@ -45,7 +45,7 @@ console.log(result); // "HELLO"
 ```ts
 import { match, None } from "languify.js/rust";
 
-const value = None.of();
+const value = None;
 
 const result = match(value, {
   Some: () => "has_value",
@@ -62,9 +62,7 @@ Use `match()` with `Result`.
 ```ts
 import { match, Result } from "languify.js/rust";
 
-const response = await Result.of(
-  Promise.resolve("success")
-);
+const response = await Result.ok("success");
 
 const value = match(response, {
   Ok: (value) => value,
@@ -79,9 +77,7 @@ console.log(value); // "success"
 ```ts
 import { match, Result } from "languify.js/rust";
 
-const response = await Result.of(
-  Promise.reject("failure")
-);
+const response = await Result.error("failure");
 
 const value = match(response, {
   Ok: () => "success",
@@ -224,17 +220,13 @@ import { match, Result } from "languify.js/rust";
 
 async function getUser(id: number) {
   if (id === 1) {
-    return Result.of(
-      Promise.resolve({
+    return Result.ok({
         id: 1,
         name: "John",
-      })
-    );
+    });
   }
 
-  return Result.of(
-    Promise.reject("User not found")
-  );
+  return Result.error("User not found");
 }
 
 const user = await getUser(1);
