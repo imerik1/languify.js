@@ -21,6 +21,6 @@ class Option<T> {
 
 export const Some = <T>(value: T) => {
   return new Option(value);
-}
+};
 
 export const None = new Option(null);
