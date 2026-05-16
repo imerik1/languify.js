@@ -1,0 +1,40 @@
+name: Check Pull Request
+
+on:
+  push:
+    branches-ignore:
+      - main
+    tags-ignore:
+      - "*"
+  pull_request:
+    branches-ignore:
+      - main
+
+jobs:
+  build-test-docs-lib:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: "pnpm"
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run tests with coverage
+        run: pnpm test:coverage
+
+      - name: Build library
+        run: pnpm lib:build
+
+      - name: Build documentation
+        run: pnpm docs:build
