@@ -1,7 +1,7 @@
 export type OptionMatch<T, U> = {
   Some: (value: T) => U;
   None: () => U;
-}
+};
 
 class Option<T> {
   constructor(protected readonly value: T) {}

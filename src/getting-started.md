@@ -37,7 +37,7 @@ const result = match(value, {
   None: () => "empty",
 });
 
-console.log(result);
+console.log(result); // HELLO WORLD;
 ```
 
 ## 🧠 What you get
@@ -53,4 +53,10 @@ You can import by language module:
 
 ```ts
 import { match } from "languify.js/rust";
+```
+
+or
+
+```ts
+import * as rust from "languify.js/rust";
 ```

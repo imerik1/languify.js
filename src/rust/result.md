@@ -12,10 +12,10 @@ It is inspired by Rust's `Result` and helps you handle errors safely without rel
 ## ✨ Overview
 
 ```ts
-Result<T>
+Result<T, E>
 
 Ok<T>   // success value
-Err     // error value
+Err<E>  // error value
 ```
 
 ## 📦 Creating a Result
@@ -35,6 +35,32 @@ const response = await Result.of(
 If the promise resolves, the result contains `Ok`.
 
 If the promise rejects, the result contains `Err`.
+
+## ⚡ Creating results directly
+
+### Result.ok()
+
+Creates a successful `Result`.
+
+```ts
+import { Result } from "languify.js/rust";
+
+const response = await Result.ok("hello");
+
+console.log(response.unwrap()); // "hello"
+```
+
+### Result.error()
+
+Creates a failed `Result`.
+
+```ts
+import { Result } from "languify.js/rust";
+
+const response = await Result.error("failure");
+
+response.unwrap(); // throws "failure"
+```
 
 ## 🔄 Matching values
 
@@ -74,6 +100,36 @@ const message = response.match({
 });
 
 console.log(message); // "Error: failure"
+```
+
+## 📦 Working with custom error types
+
+`Result` supports custom error types through generics.
+
+```ts
+import { Result } from "languify.js/rust";
+
+type ApiError = {
+  message: string;
+  status: number;
+};
+
+const response = await Result.of<
+  string,
+  ApiError
+>(
+  Promise.reject({
+    message: "Unauthorized",
+    status: 401,
+  })
+);
+
+const result = response.match({
+  Ok: (value) => value,
+  Err: (err) => err.message,
+});
+
+console.log(result); // "Unauthorized"
 ```
 
 ## 📦 Working with Error instances
@@ -116,6 +172,87 @@ const value = response.match({
 console.log(value); // 10
 ```
 
+## ⚠️ Null values
+
+Resolved `null` values are treated as `Err`.
+
+```ts
+import { Result } from "languify.js/rust";
+
+const response = await Result.of(
+  Promise.resolve(null)
+);
+
+const value = response.match({
+  Ok: () => "success",
+  Err: () => "empty"
+});
+
+console.log(value); // "empty"
+```
+
+## 📤 Unwrapping values
+
+### unwrap()
+
+Returns the inner value of `Ok`.
+
+```ts
+import { Result } from "languify.js/rust";
+
+const response = await Result.of(
+  Promise.resolve("test")
+);
+
+console.log(response.unwrap()); // "test"
+```
+
+### unwrap() on Err
+
+Calling `unwrap()` on `Err` throws the stored error.
+
+```ts
+import { Result } from "languify.js/rust";
+
+const response = Result.error("failure");
+
+response.unwrap(); // throws "failure"
+```
+
+## 🔁 Fallback values
+
+### unwrapOr()
+
+Returns a fallback value when the result is `Err`.
+
+```ts
+import { Result } from "languify.js/rust";
+
+const response = await Result.of(
+  Promise.reject("failure")
+);
+
+const value = response.unwrapOr("fallback");
+
+console.log(value); // "fallback"
+```
+
+### unwrapOr() with success value
+
+If the result is `Ok`, the original value is returned.
+
+```ts
+import { Result } from "languify.js/rust";
+
+const response = await Result.of(
+  Promise.resolve("test")
+);
+
+const value = response.unwrapOr("other");
+
+console.log(value); // "test"
+```
+
 ## ⚠️ Important notes
 
 * `Result` helps eliminate repetitive `try/catch`
@@ -123,24 +260,31 @@ console.log(value); // 10
 * `Ok` always represents success
 * `Err` always represents failure
 * `Result.of()` automatically converts rejected promises into `Err`
+* `unwrap()` throws when the result is `Err`
+* `unwrapOr()` provides safe fallback values
+* Resolved `null` values are treated as `Err`
+* `Result.ok()` creates successful results directly
+* `Result.error()` creates failed results directly
 
 ## 🚀 Example
 
 ```ts
 import { Result } from "languify.js/rust";
 
+type UserError =
+  | "User not found"
+  | "Unauthorized";
+
 async function getUser(id: number) {
   if (id === 1) {
-    return Result.of(
-      Promise.resolve({
-        id: 1,
-        name: "John"
-      })
-    );
+    return Result.ok({
+      id: 1,
+      name: "John"
+    });
   }
 
-  return Result.of(
-    Promise.reject("User not found")
+  return Result.error<UserError>(
+    "User not found"
   );
 }
 
@@ -171,4 +315,24 @@ const value = match(response, {
 });
 
 console.log(value); // "TEST"
+```
+
+## 🧠 Result vs Option
+
+Use `Result` when an operation can fail and you need to preserve the error.
+
+```ts
+match(response, {
+  Ok: (value) => value,
+  Err: (err) => err,
+});
+```
+
+Use `Option` when a value may or may not exist.
+
+```ts
+match(user, {
+  Some: (value) => value,
+  None: () => "empty",
+});
 ```

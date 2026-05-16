@@ -1,20 +1,45 @@
-export type ResultMatch<T, U> = {
+export type ResultMatch<T, E, U> = {
   Ok: (value: NonNullable<T>) => U;
-  Err: (err: Error | unknown) => U;
-}
+  Err: (err: Error | E) => U;
+};
 
-export class Result<T> {
-  constructor(private readonly ok: T | null, private readonly err: Error | unknown | null) {}
+export class Result<T, E> {
+  constructor(
+    private readonly ok: T | null,
+    private readonly err: Error | E | null
+  ) {}
 
-  match<U>(cases: ResultMatch<T, U>): U {
-      return this.ok ? cases.Ok(this.ok) : cases.Err(this.err);
+  match<U>(cases: ResultMatch<T, E, U>): U {
+    return this.ok ? cases.Ok(this.ok) : cases.Err(this.err as Error | E);
   }
 
-  static async of<T>(execution: Promise<T>): Promise<Result<T | null>> {
-    try {
-      return new Result(await execution, null);
-    } catch (err) {
-      return new Result(null, err)
+  unwrap(): NonNullable<T> {
+    if (this.ok) {
+      return this.ok;
     }
+    throw this.err;
+  }
+
+  unwrapOr(other: NonNullable<T>): NonNullable<T> {
+    if (this.ok) {
+      return this.ok;
+    }
+    return other;
+  }
+
+  static async of<T, E>(execution: Promise<T>): Promise<Result<T | null, E>> {
+    try {
+      return new Result<T, E>(await execution, null);
+    } catch (err) {
+      return new Result<T, E>(null, err as E);
+    }
+  }
+
+  static ok<T>(value: T) {
+    return Result.of(Promise.resolve(value));
+  }
+
+  static error<T>(value: T) {
+    return Result.of(Promise.reject(value));
   }
 }

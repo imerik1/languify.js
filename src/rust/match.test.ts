@@ -19,13 +19,13 @@ describe("rust:match", () => {
 
       expect(result).toBe("empty");
     });
-  })
+  });
 
   describe("Result", () => {
     it("should match ok", async () => {
       const result = rust.match(await rust.Result.of(Promise.resolve("test")), {
         Ok: (value) => value,
-        Err: (err) => null,
+        Err: (_) => null,
       });
 
       expect(result).toBe("test");
@@ -48,13 +48,16 @@ describe("rust:match", () => {
 
       expect(result).toBe("empty");
     });
-  })
+  });
 
   describe("Custom", () => {
     class Custom {
       constructor(private readonly value: "google" | string) {}
 
-      match<U>(cases: { "1": (value: "google" | string) => U, "2": (value: "google" | string) => U }) {
+      match<U>(cases: {
+        "1": (value: "google" | string) => U;
+        "2": (value: "google" | string) => U;
+      }) {
         return this.value === "google" ? cases[1](this.value) : cases[2](this.value);
       }
     }
@@ -76,7 +79,7 @@ describe("rust:match", () => {
 
       expect(result).toBe("microsoft Employee");
     });
-  })
+  });
 
   describe("Generic", () => {
     it("should match string", () => {
@@ -96,5 +99,5 @@ describe("rust:match", () => {
 
       expect(result).toBe("empty");
     });
-  })
+  });
 });

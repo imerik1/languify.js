@@ -1,4 +1,3 @@
-
 /* =========================
    BASE (DARK ONLY)
 ========================= */
@@ -107,6 +106,7 @@ pre {
 }
 
 /* fallback */
+/* biome-ignore lint/style/noDescendingSpecificity: just styling */
 code {
   font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas;
   color: #ffb86b;

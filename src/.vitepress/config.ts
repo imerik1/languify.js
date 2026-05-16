@@ -1,38 +1,53 @@
-import { defineConfig } from 'vitepress'
-import { tabsMarkdownPlugin } from 'vitepress-plugin-tabs'
+import { defineConfig } from "vitepress";
+import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
+import packageJson from "../../package.json";
+
+const buildVersion = (version: string) => {
+  return `v${version}`;
+};
+
+const VERSION = process.env?.LATEST_VERSION || buildVersion(packageJson.version);
+const IS_DEV = process.env.NODE_ENV === "development";
+
+if (process.env?.LATEST_VERSION && process.env.LATEST_VERSION !== "latest") {
+  process.exit(1);
+}
 
 export default defineConfig({
   title: "languify.js",
-  description: "Languify.JS is a library for using tools from other programming languages in javascript",
+  lang: "en-US",
+  description:
+    "Languify.JS is a library for using tools from other programming languages in javascript",
+  base: `/docs/${IS_DEV ? "latest" : VERSION}`,
   markdown: {
     config(md) {
-      md.use(tabsMarkdownPlugin)
+      md.use(tabsMarkdownPlugin);
     },
   },
   appearance: "force-dark",
   themeConfig: {
-    nav: [
-      { text: 'Docs', link: '/getting-started' },
-    ],
+    nav: [{ text: "Docs", link: "/getting-started" }],
     sidebar: [
       {
-        text: 'Introduction',
-        items: [
-          { text: 'Getting started', link: '/getting-started' },
-        ]
+        text: "Introduction",
+        items: [{ text: "Getting started", link: "getting-started" }],
       },
       {
-        text: 'Rust',
+        text: "Rust",
         items: [
-          { text: 'Option', link: '/rust/option' },
-          { text: 'Match', link: '/rust/match' },
-          { text: 'Result', link: '/rust/result' },
-        ]
-      }
+          { text: "Option", link: "rust/option" },
+          { text: "Match", link: "rust/match" },
+          { text: "Result", link: "rust/result" },
+        ],
+      },
     ],
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/imerik1/languify.js' }
-    ]
+      {
+        icon: "github",
+        link: `https://github.com/imerik1/languify.js/tree/${VERSION === "latest" ? "main" : VERSION}`,
+      },
+      { icon: "vitest", link: `http://localhost:5000/coverage/${VERSION}` },
+    ],
   },
-  outDir: "../dist/docs"
-})
+  outDir: `../dist/docs/${VERSION}`,
+});
