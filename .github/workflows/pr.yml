@@ -2,13 +2,8 @@ name: Check Pull Request
 run-name: ${{ github.run_number }} - ${{ github.actor }} - ${{ github.head_ref }}
 
 on:
-  push:
-    branches-ignore:
-      - main
-    tags-ignore:
-      - "*"
   pull_request:
-    branches-ignore:
+    branches:
       - main
 
 jobs:
