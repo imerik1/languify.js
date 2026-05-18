@@ -3,9 +3,16 @@
   "version": "1.0.0",
   "description": "Languify.JS is a library for using tools from other programming languages in javascript",
   "type": "module",
-  "keywords": [],
+  "keywords": [
+    "rust-to-js",
+    "golang-to-js",
+    "javascript-universal",
+    "languifyjs",
+    "universal-language"
+  ],
   "author": "imerik1",
   "license": "MIT",
+  "private": false,
   "sideEffects": false,
   "repository": {
     "url": "https://github.com/imerik1/languify.js",
@@ -22,29 +29,31 @@
     "dist/lib"
   ],
   "scripts": {
+    "purge": "rimraf dist",
     "format": "biome format --write",
     "format:ci": "biome ci",
-
     "lib:build": "cross-env NODE_ENV=production tsup",
-
     "test": "cross-env NODE_ENV=development vitest",
     "test:watch": "cross-env NODE_ENV=development vitest --watch",
-
-    "pretest:coverage": "cross-env NODE_ENV=development rimraf dist/coverage",
+    "pretest:coverage": "cross-env NODE_ENV=development rimraf dist/site/coverage",
     "test:coverage": "cross-env NODE_ENV=development vitest --coverage",
-    "posttest:coverage": "cross-env NODE_ENV=development rsync -a dist/coverage/v*/ dist/coverage/latest/",
-
+    "posttest:coverage": "rsync -a dist/site/coverage/v*/ dist/site/coverage",
     "docs:dev": "cross-env NODE_ENV=development vitepress dev src",
-
-    "predocs:build": "cross-env NODE_ENV=development rimraf dist/docs",
-    "docs:build": "cross-env NODE_ENV=production vitepress build src",
-    "postdocs:build": "cross-env NODE_ENV=production LATEST_VERSION=latest vitepress build src"
+    "predocs:build": "rimraf dist/site/docs",
+    "docs:build": "cross-env NODE_ENV=production LATEST_VERSION=latest vitepress build src",
+    "postdocs:build": "cross-env NODE_ENV=production vitepress build src && rsync -a ci/site/* dist/site",
+    "site:serve": "cross-env NODE_ENV=production http-server dist/site",
+    "site:publish": "rclone sync ./dist/site r2:languifyjs-site",
+    "presite:download": "rimraf dist/site",
+    "site:download": "rclone copy r2:languifyjs-site dist/site",
+    "rclone:config": "node ./ci/scripts/rclone-config.js && rclone config file"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
     "@types/node": "^25.8.0",
     "@vitest/coverage-v8": "^4.1.6",
     "cross-env": "^10.1.0",
+    "http-server": "^14.1.1",
     "rimraf": "^6.1.3",
     "rsync": "^0.6.1",
     "tsup": "^8.5.1",

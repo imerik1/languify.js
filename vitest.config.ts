@@ -8,7 +8,7 @@ export default defineConfig({
     include: ["**/*.test.ts"],
     coverage: {
       provider: "v8",
-      reportsDirectory: `dist/coverage/v${packageJson.version}`,
+      reportsDirectory: `dist/site/coverage/v${packageJson.version}`,
       clean: true,
       exclude: ["**/index.ts", "**/.vitepress"]
     },

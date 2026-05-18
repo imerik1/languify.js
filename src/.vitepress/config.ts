@@ -18,7 +18,7 @@ export default defineConfig({
   lang: "en-US",
   description:
     "Languify.JS is a library for using tools from other programming languages in javascript",
-  base: `/docs/${IS_DEV ? "latest" : VERSION}`,
+  base: `/docs/${VERSION === "latest" ? "" : `${VERSION}`}`,
   markdown: {
     config(md) {
       md.use(tabsMarkdownPlugin);
@@ -30,14 +30,14 @@ export default defineConfig({
     sidebar: [
       {
         text: "Introduction",
-        items: [{ text: "Getting started", link: "getting-started" }],
+        items: [{ text: "Getting started", link: "/getting-started" }],
       },
       {
         text: "Rust",
         items: [
-          { text: "Option", link: "rust/option" },
-          { text: "Match", link: "rust/match" },
-          { text: "Result", link: "rust/result" },
+          { text: "Option", link: "/rust/option" },
+          { text: "Match", link: "/rust/match" },
+          { text: "Result", link: "/rust/result" },
         ],
       },
     ],
@@ -46,8 +46,11 @@ export default defineConfig({
         icon: "github",
         link: `https://github.com/imerik1/languify.js/tree/${VERSION === "latest" ? "main" : VERSION}`,
       },
-      { icon: "vitest", link: `http://localhost:5000/coverage/${VERSION}` },
+      {
+        icon: "vitest",
+        link: `/coverage${VERSION === "latest" ? "/" : `/${VERSION}`}`,
+      },
     ],
   },
-  outDir: `../dist/docs/${VERSION}`,
+  outDir: `../dist/site/docs${VERSION === "latest" ? "" : `/${VERSION}`}`,
 });

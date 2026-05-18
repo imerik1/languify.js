@@ -1,0 +1,79 @@
+name: Releasing
+run-name: Releasing ${{ github.ref_name }}
+
+on:
+  push:
+    tags:
+      - v*
+
+env:
+  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+  R2_CLOUDFLARE_ACCOUNT_ID: ${{ secrets.R2_CLOUDFLARE_ACCOUNT_ID }}
+  R2_CLOUDFLARE_API_TOKEN: ${{ secrets.R2_CLOUDFLARE_API_TOKEN }}
+
+jobs:
+  release:
+    name: Releasing ${{ github.ref_name }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Format
+        run: pnpm format:ci
+
+      - name: Run test
+        run: pnpm test:coverage
+
+      - name: Build library
+        run: pnpm lib:build
+
+      - name: Build documentation
+        run: pnpm docs:build
+
+  update-site:
+    name: Updating site
+    runs-on: ubuntu-latest
+    needs: release
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run test
+        run: pnpm test:coverage
+
+      - name: Build documentation
+        run: pnpm docs:build
+
+      - name: Install rclone
+        run: curl https://rclone.org/install.sh | bash
+
+      - name: Configure rclone
+        run: pnpm rclone:config
+
+      - name: Publish new versions
+        run: pnpm site:publish
