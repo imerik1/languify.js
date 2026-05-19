@@ -20,9 +20,9 @@
   },
   "exports": {
     "./rust": {
-      "types": "./dist/lib/rust/rust.d.ts",
-      "import": "./dist/lib/rust/rust.mjs",
-      "require": "./dist/lib/rust/rust.cjs"
+      "types": "./dist/lib/rust.d.ts",
+      "import": "./dist/lib/rust.mjs",
+      "require": "./dist/lib/rust.cjs"
     }
   },
   "files": [
@@ -35,25 +35,24 @@
     "lib:build": "cross-env NODE_ENV=production tsup",
     "test": "cross-env NODE_ENV=development vitest",
     "test:watch": "cross-env NODE_ENV=development vitest --watch",
-    "pretest:coverage": "cross-env NODE_ENV=development rimraf dist/site/coverage",
-    "test:coverage": "cross-env NODE_ENV=development vitest --coverage",
-    "posttest:coverage": "rsync -a dist/site/coverage/v*/ dist/site/coverage",
+    "tag:validate": "node ./ci/scripts/tag-validate-exists.js",
+    "tag:push": "node ./ci/scripts/tag-push.js",
+    "rclone:config": "node ./ci/scripts/rclone-config.js && rclone config file",
+    "r2:copy": "rclone copy",
     "docs:dev": "cross-env NODE_ENV=development vitepress dev src",
-    "predocs:build": "rimraf dist/site/docs",
-    "docs:build": "cross-env NODE_ENV=production LATEST_VERSION=latest vitepress build src",
-    "postdocs:build": "cross-env NODE_ENV=production vitepress build src && rsync -a ci/site/* dist/site",
-    "site:serve": "cross-env NODE_ENV=production http-server dist/site",
-    "site:publish": "rclone sync ./dist/site r2:languifyjs-site",
-    "presite:download": "rimraf dist/site",
-    "site:download": "rclone copy r2:languifyjs-site dist/site",
-    "rclone:config": "node ./ci/scripts/rclone-config.js && rclone config file"
+    "pretest:coverage": "rimraf dist/site/v*/coverage",
+    "test:coverage": "cross-env NODE_ENV=development vitest --coverage",
+    "predocs:build": "rimraf dist/site/v*/docs",
+    "docs:build": "cross-env NODE_ENV=production vitepress build src && rsync -a ci/site/* dist/site",
+    "site:publish": "rclone copy ./dist/site r2:languifyjs/site",
+    "presite:download": "rimraf ./dist/site",
+    "site:download": "rclone copy ./dist/site r2:languifyjs/site"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
     "@types/node": "^25.8.0",
     "@vitest/coverage-v8": "^4.1.6",
     "cross-env": "^10.1.0",
-    "http-server": "^14.1.1",
     "rimraf": "^6.1.3",
     "rsync": "^0.6.1",
     "tsup": "^8.5.1",
@@ -64,5 +63,5 @@
     "vitest": "^4.1.6",
     "vue": "^3.5.34"
   },
-  "packageManager": "pnpm@11.1.2+sha512.415a1cc25974731e75455c1468371be74c5aa5fb7621b50d4056d222451609f11412f23fd602e6169f1e060466641f798597e1be961a10688836a67b16569499"
+  "packageManager": "pnpm@11.1.3"
 }

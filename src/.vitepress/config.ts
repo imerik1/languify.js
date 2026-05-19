@@ -1,24 +1,17 @@
 import { defineConfig } from "vitepress";
 import { tabsMarkdownPlugin } from "vitepress-plugin-tabs";
 import packageJson from "../../package.json";
+import { buildVersion, parse } from "../.utils/version";
 
-const buildVersion = (version: string) => {
-  return `v${version}`;
-};
-
-const VERSION = process.env?.LATEST_VERSION || buildVersion(packageJson.version);
-const IS_DEV = process.env.NODE_ENV === "development";
-
-if (process.env?.LATEST_VERSION && process.env.LATEST_VERSION !== "latest") {
-  process.exit(1);
-}
+const VERSION = `${buildVersion(parse(buildVersion(packageJson.version)).major)}`;
+// const IS_DEV = process.env.NODE_ENV === "development";
 
 export default defineConfig({
-  title: "languify.js",
+  title: `languify.js`,
   lang: "en-US",
   description:
     "Languify.JS is a library for using tools from other programming languages in javascript",
-  base: `/docs/${VERSION === "latest" ? "" : `${VERSION}`}`,
+  base: `/${VERSION}/docs`,
   markdown: {
     config(md) {
       md.use(tabsMarkdownPlugin);
@@ -44,13 +37,13 @@ export default defineConfig({
     socialLinks: [
       {
         icon: "github",
-        link: `https://github.com/imerik1/languify.js/tree/${VERSION === "latest" ? "main" : VERSION}`,
+        link: `https://github.com/imerik1/languify.js/tags`,
       },
       {
         icon: "vitest",
-        link: `/coverage${VERSION === "latest" ? "/" : `/${VERSION}`}`,
+        link: `/${VERSION}/coverage`,
       },
     ],
   },
-  outDir: `../dist/site/docs${VERSION === "latest" ? "" : `/${VERSION}`}`,
+  outDir: `../dist/site/${VERSION}/docs`,
 });

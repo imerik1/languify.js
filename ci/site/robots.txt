@@ -3,11 +3,8 @@ User-agent: *
 # Ignorar cobertura
 Disallow: /coverage/
 
-# Ignorar index raiz
-Disallow: /index.html
-
 # Página principal / canonical crawling target
 Allow: /docs/
 Allow: /docs/index.html
 
-Sitemap: https://SEU-DOMINIO.com/sitemap.xml
+Sitemap: /sitemap.xml
