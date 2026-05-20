@@ -38,11 +38,13 @@ jobs:
         run: cd ci/infra/terraform && terraform plan -out .tfplan
         env:
           TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
       - name: Applying terraform
         run: cd ci/infra/terraform && terraform apply -auto-approve ".tfplan"
         env:
           TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
   create-tag:
     name: Creating tag
