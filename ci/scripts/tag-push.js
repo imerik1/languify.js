@@ -13,7 +13,7 @@ try {
   execSync(`git tag ${tag}`, { stdio: "inherit" });
 
   console.log(`Pushing ${tag}...`);
-  execSync(`git push origin tag ${tag}`, { stdio: "inherit" });
+  execSync(`git push origin ${tag}`, { stdio: "inherit" });
 
   console.info(`✅ Tag ${tag} pushed.`);
 } catch (err) {
