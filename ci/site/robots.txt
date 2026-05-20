@@ -1,0 +1,9 @@
+User-agent: *
+
+Disallow: /coverage/
+Disallow: /*/coverage/
+
+Allow: /*/docs/
+Allow: /*/docs/*
+
+Sitemap: https://languifyjs.erikmarques.com.br/sitemap.xml

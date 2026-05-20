@@ -1,0 +1,44 @@
+name: Check Pull Request
+run-name: PR (${{ github.actor }}) ${{ github.head_ref }}
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-pull-request:
+    name: Checking pull request
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Format
+        run: pnpm format:ci
+
+      - name: Run test
+        run: pnpm test:coverage
+
+      - name: Build library
+        run: pnpm lib:build
+
+      - name: Build documentation
+        run: pnpm docs:build
+
+      - name: Validate version tag
+        run: pnpm tag:validate

@@ -141,3 +141,14 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Terraform
+
+.terraform
+.terraform.lock.hcl
+*.tfbackend
+.tfplan
+
+# Cloudflare
+
+.wrangler

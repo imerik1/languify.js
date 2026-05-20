@@ -1,0 +1,17 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "languifyjs",
+  "main": "ci/infra/worker.js",
+  "compatibility_date": "2026-05-20",
+  "workers_dev": false,
+  "assets": {
+    "directory": "./dist/site",
+    "binding": "ASSETS"
+  },
+  "routes": [
+    {
+      "pattern": "languifyjs.erikmarques.com.br/*",
+      "zone_name": "erikmarques.com.br"
+    }
+  ]
+}
