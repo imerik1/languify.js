@@ -1,0 +1,84 @@
+name: Releasing
+run-name: Releasing
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  infrastructure:
+    name: Checking infrastructure
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install terraform
+        run: |
+          wget -O - https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(grep -oP '(?<=UBUNTU_CODENAME=).*' /etc/os-release || lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt update && sudo apt install terraform
+
+      - name: Initialize terraform
+        run: |
+          cd ci/infra/terraform && envsubst < tfbackend.tpl < runtime.tfbackend && terraform init -backend-config=runtime.tfbackend
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ACCESS_KEY: ${{ secrets.CLOUDFLARE_ACCESS_KEY }}
+          CLOUDFLARE_SECRET_KEY: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Planning terraform
+        run: cd ci/infra/terraform && terraform plan -out .tfplan
+        env:
+          TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+      - name: Applying terraform
+        run: cd ci/infra/terraform && terraform apply -auto-approve ".tfplan"
+        env:
+          TF_VAR_cloudflare_account_id: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+
+  create-tag:
+    name: Creating tag
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - name: Enable corepack
+        run: corepack enable
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Format
+        run: pnpm format:ci
+
+      - name: Run test
+        run: pnpm test:coverage
+
+      - name: Build library
+        run: pnpm lib:build
+
+      - name: Build documentation
+        run: pnpm docs:build
+
+      - name: Validate version tag
+        run: pnpm tag:validate
+      
+      - name: Creating tag
+        run: pnpm tag:push

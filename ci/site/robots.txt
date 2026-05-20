@@ -1,10 +1,9 @@
 User-agent: *
 
-# Ignorar cobertura
 Disallow: /coverage/
+Disallow: /*/coverage/
 
-# Página principal / canonical crawling target
-Allow: /docs/
-Allow: /docs/index.html
+Allow: /*/docs/
+Allow: /*/docs/*
 
-Sitemap: /sitemap.xml
+Sitemap: https://languifyjs.erikmarques.com.br/sitemap.xml

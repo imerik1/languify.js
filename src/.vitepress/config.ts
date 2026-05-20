@@ -17,6 +17,9 @@ export default defineConfig({
       md.use(tabsMarkdownPlugin);
     },
   },
+  sitemap: {
+    hostname: `https://languifyjs.erikmarques.com.br/${VERSION}/docs`,
+  },
   appearance: "force-dark",
   themeConfig: {
     nav: [{ text: "Docs", link: "/getting-started" }],

@@ -1,35 +1,45 @@
-# languify.js
+# 📘 languify.js
 
-A JavaScript library that brings language-inspired features from multiple programming paradigms into one unified toolkit.
+**languify.js** is a lightweight toolkit for pattern matching, functional utilities, and language-inspired constructs such as `Option`, `match`, and more.
 
-Instead of following a single language style, languify.js explores ideas from Rust, Go, functional programming, and other ecosystems — adapting them into JavaScript in a consistent and composable way.
+## 📚 Documentation
 
-## Why languify.js?
+Full documentation:
 
-JavaScript is flexible, but often lacks structured primitives for expressing control flow, state, and composition in a predictable way.
+https://languifyjs.erikmarques.com.br/v1/docs/
 
-languify.js aims to bring clarity by introducing concepts inspired by different languages, without locking you into a single paradigm.
+---
 
-## Design philosophy
+## 📦 Installation
 
-- Borrow useful ideas from multiple languages
-- Keep APIs consistent and composable
-- Avoid language dogma
-- Prefer explicit behavior over implicit magic
-- Adapt concepts to JavaScript, not copy them blindly
+### npm
 
-## Core idea
+```bash
+npm install languify.js
+```
 
-Instead of asking “how does Rust do this?” or “how does Go do this?”, languify.js asks:
+### pnpm
 
-> “what is the most useful abstraction for JavaScript developers?”
+```bash
+pnpm add languify.js
+```
 
-## Example
+### yarn
+
+```bash
+yarn add languify.js
+```
+
+---
+
+## 🚀 Quick Start
+
+Import utilities from the desired language module.
 
 ```ts
 import { Some, None, match } from "languify.js/rust";
 
-const value = Some("languify");
+const value = Some("hello world");
 
 const result = match(value, {
   Some: (v) => v.toUpperCase(),
@@ -37,3 +47,38 @@ const result = match(value, {
 });
 
 console.log(result);
+// HELLO WORLD
+```
+
+---
+
+## ✨ Features
+
+languify.js provides:
+
+- Pattern matching utilities
+- Functional primitives inspired by modern languages
+- Language-style APIs (`Rust`, `Go`, and more)
+- Modular imports
+
+---
+
+## 📁 Import Styles
+
+Import directly from a language module:
+
+```ts
+import { match } from "languify.js/rust";
+```
+
+Or import the entire module namespace:
+
+```ts
+import * as rust from "languify.js/rust";
+```
+
+---
+
+## 🌍 Philosophy
+
+languify.js brings familiar programming patterns from multiple languages into the JavaScript ecosystem while keeping the API lightweight, composable, and tree-shakeable.

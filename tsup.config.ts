@@ -12,7 +12,7 @@ export default defineConfig({
   outDir: "dist/lib",
   outExtension({ format }) {
     return {
-      js: format === "esm" ? ".mjs" : ".cjs"
+      js: format === "esm" ? ".mjs" : ".cjs",
     };
   },
 });

@@ -6,11 +6,6 @@ on:
     tags:
       - v*
 
-env:
-  CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-  R2_CLOUDFLARE_ACCOUNT_ID: ${{ secrets.R2_CLOUDFLARE_ACCOUNT_ID }}
-  R2_CLOUDFLARE_API_TOKEN: ${{ secrets.R2_CLOUDFLARE_API_TOKEN }}
-
 jobs:
   publish-npm:
     name: Publishing to NPM ${{ github.ref_name }}
@@ -74,6 +69,10 @@ jobs:
 
       - name: Configure rclone
         run: pnpm rclone:config
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ACCESS_KEY: ${{ secrets.CLOUDFLARE_ACCESS_KEY }}
+          CLOUDFLARE_SECRET_KEY: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Publish new versions
         run: pnpm site:publish
@@ -103,9 +102,15 @@ jobs:
 
       - name: Configure rclone
         run: pnpm rclone:config
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_ACCESS_KEY: ${{ secrets.CLOUDFLARE_ACCESS_KEY }}
+          CLOUDFLARE_SECRET_KEY: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
 
       - name: Download versions
         run: pnpm site:download
 
-      - name: Building dockerfile
-        run: docker build -f ci/infra/Dockerfile -t languify-server:latest .
+      - name: Deploy site
+        run: pnpm site:deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

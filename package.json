@@ -46,10 +46,14 @@
     "docs:build": "cross-env NODE_ENV=production vitepress build src && rsync -a ci/site/* dist/site",
     "site:publish": "rclone copy ./dist/site r2:languifyjs/site",
     "presite:download": "rimraf ./dist/site",
-    "site:download": "rclone copy ./dist/site r2:languifyjs/site"
+    "site:download": "rclone copy ./dist/site r2:languifyjs/site",
+    "site:preview": "wrangler dev",
+    "site:deploy": "wrangler deploy",
+    "wrangler:login": "wrangler login --browser=false"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
+    "@cloudflare/workers-types": "^4.20260519.1",
     "@types/node": "^25.8.0",
     "@vitest/coverage-v8": "^4.1.6",
     "cross-env": "^10.1.0",
@@ -61,7 +65,8 @@
     "vitepress": "^1.6.4",
     "vitepress-plugin-tabs": "^0.9.0",
     "vitest": "^4.1.6",
-    "vue": "^3.5.34"
+    "vue": "^3.5.34",
+    "wrangler": "^4.93.0"
   },
   "packageManager": "pnpm@11.1.3"
 }

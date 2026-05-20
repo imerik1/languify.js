@@ -11,7 +11,7 @@ export default defineConfig({
       provider: "v8",
       reportsDirectory: `dist/site/${buildVersion(parse(buildVersion(packageJson.version)).major)}/coverage`,
       clean: false,
-      exclude: ["**/index.ts", "**/.vitepress"]
+      exclude: ["**/index.ts", "**/.vitepress"],
     },
   },
 });

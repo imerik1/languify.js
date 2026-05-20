@@ -1,3 +1,14 @@
+---
+head:
+  - - meta
+    - name: robots
+      content: index,follow
+
+  - - link
+    - rel: canonical
+      href: https://languifyjs.erikmarques.com.br/v1/docs
+---
+
 # languify.js
 
 A JavaScript library that brings language-inspired features from multiple programming paradigms into one unified toolkit.
