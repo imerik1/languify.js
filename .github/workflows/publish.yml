@@ -81,7 +81,7 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_ACCESS_KEY: ${{ secrets.CLOUDFLARE_ACCESS_KEY }}
-          CLOUDFLARE_SECRET_KEY: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_SECRET_KEY: ${{ secrets.CLOUDFLARE_SECRET_KEY }}
 
       - name: Publish new versions
         run: pnpm site:publish
@@ -114,7 +114,7 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_ACCESS_KEY: ${{ secrets.CLOUDFLARE_ACCESS_KEY }}
-          CLOUDFLARE_SECRET_KEY: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_SECRET_KEY: ${{ secrets.CLOUDFLARE_SECRET_KEY }}
 
       - name: Download versions
         run: pnpm site:download
