@@ -42,7 +42,7 @@ jobs:
         run: pnpm lib:build
       
       - name: Publishing to NPM
-        run: pnpm pack && pnpm publish
+        run: pnpm pack && pnpm publish --no-git-checks
 
   create-version:
     name: Creating version ${{ github.ref_name }}
