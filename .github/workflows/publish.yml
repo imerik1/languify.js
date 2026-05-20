@@ -74,7 +74,7 @@ jobs:
         run: pnpm docs:build
 
       - name: Install rclone
-        run: curl https://rclone.org/install.sh | bash
+        run: sudo -v ; curl https://rclone.org/install.sh | sudo bash
 
       - name: Configure rclone
         run: pnpm rclone:config
@@ -107,7 +107,7 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Install rclone
-        run: curl https://rclone.org/install.sh | bash
+        run: sudo -v ; curl https://rclone.org/install.sh | sudo bash
 
       - name: Configure rclone
         run: pnpm rclone:config
