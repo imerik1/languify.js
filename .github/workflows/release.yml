@@ -32,7 +32,7 @@ jobs:
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_ACCESS_KEY: ${{ secrets.CLOUDFLARE_ACCESS_KEY }}
-          CLOUDFLARE_SECRET_KEY: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          CLOUDFLARE_SECRET_KEY: ${{ secrets.CLOUDFLARE_SECRET_KEY }}
 
       - name: Planning terraform
         run: cd ci/infra/terraform && terraform plan -out .tfplan
