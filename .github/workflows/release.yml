@@ -2,7 +2,7 @@ name: Releasing
 run-name: Releasing
 
 on:
-  pull_request:
+  push:
     branches:
       - main
 
@@ -28,7 +28,7 @@ jobs:
 
       - name: Initialize terraform
         run: |
-          cd ci/infra/terraform && envsubst < tfbackend.tpl < runtime.tfbackend && terraform init -backend-config=runtime.tfbackend
+          cd ci/infra/terraform && envsubst < tfbackend.tpl > runtime.tfbackend && terraform init -backend-config=runtime.tfbackend
         env:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           CLOUDFLARE_ACCESS_KEY: ${{ secrets.CLOUDFLARE_ACCESS_KEY }}
@@ -47,6 +47,7 @@ jobs:
   create-tag:
     name: Creating tag
     runs-on: ubuntu-latest
+    needs: infrastructure
 
     steps:
       - name: Checkout repository

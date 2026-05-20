@@ -3,7 +3,7 @@
 import { execSync } from "node:child_process";
 import packageJson from "../../package.json" with { type: "json" };
 
-import "./tag-validate-exists";
+import "./tag-validate-exists.js";
 
 const tag = `v${packageJson.version}`;
 
