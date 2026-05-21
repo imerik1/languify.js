@@ -7,8 +7,8 @@ export function match<Cases, Return>(value: Matchable<Cases, Return>, cases: Cas
 export function match<T extends string | number | symbol | null, U>(
   value: T,
   cases: {
-    Some: (value: NonNullable<T>) => U;
-    None: () => U;
+    Some?: U | ((value: NonNullable<T>) => U);
+    None?: U | (() => U);
   }
 ): U;
 
@@ -18,5 +18,19 @@ export function match(value: any, cases: any) {
     return value.match(cases);
   }
 
-  return value != null ? cases.Some(value) : cases.None();
+  if (value != null) {
+    switch (typeof cases?.Some) {
+      case "function":
+        return cases.Some(value);
+      default:
+        return cases?.Some;
+    }
+  }
+
+  switch (typeof cases?.None) {
+    case "function":
+      return cases.None();
+    default:
+      return cases?.None;
+  }
 }
