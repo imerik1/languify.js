@@ -99,5 +99,23 @@ describe("rust:match", () => {
 
       expect(result).toBe("empty");
     });
+
+    it("should match string", () => {
+      const result = rust.match("has_value", {
+        Some: "has_value",
+        None: () => "empty",
+      });
+
+      expect(result).toBe("has_value");
+    });
+
+    it("should match null", () => {
+      const result = rust.match(null, {
+        Some: () => "has_value",
+        None: "empty",
+      });
+
+      expect(result).toBe("empty");
+    });
   });
 });

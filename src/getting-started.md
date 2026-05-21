@@ -11,15 +11,15 @@ Install the package via your preferred package manager:
 :::tabs
 == npm
 ```bash
-npm install languify.js
+npm install languify.js@^1
 ```
 == pnpm
 ```bash
-pnpm add languify.js
+pnpm add languify.js@^1
 ```
 == yarn
 ```bash
-yarn add languify.js
+yarn add languify.js@^1
 ```
 :::
 

@@ -31,6 +31,7 @@ onMounted(async () => {
   <Layout>
     <template #nav-bar-content-after>
       <VPFlyout
+        v-if="items.length"
         :button="version"
         label="Versions"
         :items="items"
