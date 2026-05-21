@@ -1,13 +1,16 @@
 {
   "name": "languify.js",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Language-inspired functional utilities for JavaScript and TypeScript.",
   "type": "module",
   "keywords": [
+    "oop",
     "functional-programming",
     "pattern-matching",
     "option",
     "rust",
+    "java",
+    "optional",
     "golang",
     "typescript",
     "javascript",
@@ -32,6 +35,11 @@
       "types": "./dist/lib/rust.d.ts",
       "import": "./dist/lib/rust.mjs",
       "require": "./dist/lib/rust.cjs"
+    },
+    "./java": {
+      "types": "./dist/lib/java.d.ts",
+      "import": "./dist/lib/java.mjs",
+      "require": "./dist/lib/java.cjs"
     }
   },
   "files": [

@@ -12,4 +12,9 @@ describe("rust:option", () => {
   it("should unwrapOr return other option when value not exist", () => {
     expect(rust.None.unwrapOr("secondTest")).toBe("secondTest");
   });
+
+  it("should toJSON", () => {
+    expect(JSON.stringify(rust.Some("teste"))).toBe('"teste"');
+    expect(JSON.stringify(rust.None)).toBe("null");
+  });
 });

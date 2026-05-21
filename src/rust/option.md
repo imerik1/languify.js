@@ -7,7 +7,9 @@ Every `Option` is either:
 * `Some` → contains a value
 * `None` → represents absence of a value
 
-It is inspired by Rust's `Option` and helps you avoid unsafe `null` and `undefined` checks in a safe and expressive way.
+Inspired by Rust's `Option`.
+
+It provides a safe and expressive alternative to manual `null` and `undefined` handling.
 
 ## ✨ Overview
 
@@ -18,7 +20,7 @@ None     // represents absence
 
 ## 📦 Creating an Option
 
-### Some
+### Creating `Some`
 
 Use `Some(value)` to wrap an existing value.
 
@@ -28,7 +30,7 @@ import { Some } from "languify.js/rust";
 const value = Some("hello");
 ```
 
-### None
+### Using `None`
 
 Use `None` to represent absence.
 
@@ -40,7 +42,9 @@ const value = None;
 
 ## 🔄 Matching values
 
-You can safely handle both cases using `match`.
+### Instance matching
+
+Every `Option` supports `.match()`.
 
 ```ts
 import { Some } from "languify.js/rust";
@@ -50,46 +54,104 @@ const result = Some("world").match({
   None: () => "Nothing here"
 });
 
-console.log(result); // "Hello world"
+console.log(result);
+// "Hello world"
 ```
 
-## 📤 Unwrapping values
+### Matching `None`
+
+```ts
+import { None } from "languify.js/rust";
+
+const result = None.match({
+  Some: (value) => value,
+  None: () => "empty"
+});
+
+console.log(result);
+// "empty"
+```
+
+### Using direct values
+
+Match branches may also use direct values.
+
+```ts
+import { Some, None } from "languify.js/rust";
+
+Some("hello").match({
+  Some: "present",
+  None: "empty"
+});
+
+None.match({
+  Some: "present",
+  None: "empty"
+});
+```
+
+## 📤 Extracting values
 
 ### unwrap()
 
-Returns the inner value from `Some`.
+Returns the wrapped value.
 
 ```ts
 import { Some } from "languify.js/rust";
 
 const value = Some("test");
 
-console.log(value.unwrap()); // "test"
+console.log(value.unwrap());
+// "test"
 ```
 
-⚠️ Calling `unwrap()` on `None` is unsafe and may throw an error.
+```ts
+import { None } from "languify.js/rust";
+
+console.log(None.unwrap());
+// null
+```
 
 ## 🔁 Fallback values
 
 ### unwrapOr()
 
-Returns a fallback value when the option is `None`.
+Returns a fallback value.
 
 ```ts
 import { None } from "languify.js/rust";
 
 const value = None.unwrapOr("fallback");
 
-console.log(value); // "fallback"
+console.log(value);
+// "fallback"
 ```
 
-## ⚠️ Important notes
+When a value exists:
 
-* `Option` helps eliminate unsafe `null` / `undefined` usage
-* Prefer `match` over manual checks
-* `Some` always contains a valid value
-* `None` always represents absence
-* Avoid unsafe `unwrap()` unless you're sure the value exists
+```ts
+import { Some } from "languify.js/rust";
+
+const value = Some("hello")
+  .unwrapOr("fallback");
+
+console.log(value);
+// "hello"
+```
+
+## 🔄 JSON serialization
+
+`Option` serializes to its contained value.
+
+```ts
+import { Some, None } from "languify.js/rust";
+
+JSON.stringify(Some("hello"));
+// "\"hello\""
+
+JSON.stringify(None);
+// "null"
+```
 
 ## 🚀 Example
 
@@ -114,9 +176,9 @@ const message = user.match({
 console.log(message);
 ```
 
-## ✅ Using with `match`
+## ✅ Using the standalone `match()` helper
 
-You can also use the standalone `match()` helper.
+The standalone `match()` helper also supports `Option`.
 
 ```ts
 import { match, Some } from "languify.js/rust";
@@ -126,12 +188,27 @@ const value = match(Some("test"), {
   None: () => "EMPTY"
 });
 
-console.log(value); // "TEST"
+console.log(value);
+// "TEST"
 ```
 
-## 🧠 Using with nullable values
+Direct values are also supported.
 
-The standalone `match()` helper also works with nullable values directly.
+```ts
+import { match } from "languify.js/rust";
+
+const value = match(null, {
+  Some: "has_value",
+  None: "empty"
+});
+
+console.log(value);
+// "empty"
+```
+
+## 🧠 Matching nullable values
+
+The standalone `match()` helper can work directly with primitive nullable values.
 
 ```ts
 import { match } from "languify.js/rust";
@@ -143,5 +220,22 @@ const message = match(username, {
   None: () => "No username"
 });
 
-console.log(message); // "No username"
+console.log(message);
+// "No username"
 ```
+
+Supported primitive inputs:
+
+* `string`
+* `number`
+* `symbol`
+* `null`
+
+## ⚠️ Important notes
+
+* `Some` represents a present value.
+* `None` represents absence.
+* `Option` supports instance `.match()`.
+* `match()` helper also supports `Option`.
+* Match branches may be callbacks or direct values.
+* `Option` serializes to JSON automatically.

@@ -36,6 +36,13 @@ export default defineConfig({
           { text: "Result", link: "/rust/result" },
         ],
       },
+      {
+        text: "Java",
+        items: [
+          { text: "Optional", link: "/java/optional" },
+          { text: "Exception", link: "/java/exception" },
+        ],
+      },
     ],
     socialLinks: [
       {
