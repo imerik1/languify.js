@@ -4,6 +4,7 @@ export default defineConfig({
   tsconfig: "./tsconfig.build.json",
   entry: {
     rust: "src/rust/index.ts",
+    java: "src/java/index.ts",
   },
   format: ["esm", "cjs"],
   dts: true,

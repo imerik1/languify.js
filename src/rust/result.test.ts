@@ -1,6 +1,6 @@
 import * as rust from "./result";
 
-describe("Result", () => {
+describe("rust:result", () => {
   it("should unwrapOr with value", async () => {
     const sut = await rust.Result.ok("test");
 
