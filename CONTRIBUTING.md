@@ -69,10 +69,6 @@ After VitePress finishes, the build copies root-level public files from `ci/site
 into `dist/site`. Use that folder only for files that must live at the deployed
 site root, such as `robots.txt` and `versions.json`.
 
-VitePress public assets belong in `src/public` because the VitePress root for
-this project is `src`. Those files are copied to the root of the versioned docs
-output, for example `dist/site/v1/docs/favicon.svg`.
-
 ## Module Guidelines
 
 Keep each language module isolated unless sharing code is clearly simpler and

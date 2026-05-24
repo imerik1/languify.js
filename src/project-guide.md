@@ -87,14 +87,6 @@ This means there are two public asset zones:
 
 ## Public Assets
 
-Use `src/public` for files that belong to the VitePress docs version, such as:
-
-- `favicon.svg`
-- `logo.svg`
-- `social-card.svg`
-- `site.webmanifest`
-- docs-specific downloadable files
-
 Use `ci/site` only for files that must exist at the domain root, such as:
 
 - `robots.txt`
