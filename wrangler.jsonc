@@ -10,8 +10,9 @@
   },
   "routes": [
     {
-      "pattern": "languifyjs.erikmarques.com.br/*",
-      "zone_name": "erikmarques.com.br"
+      "pattern": "languifyjs.erikmarques.com.br",
+      "zone_name": "erikmarques.com.br",
+      "custom_domain": true
     }
   ]
 }
