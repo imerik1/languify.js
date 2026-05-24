@@ -37,4 +37,4 @@ no_check_bucket = true
 
 fs.writeFileSync(configFile, r2Config, "utf8");
 
-console.log(`✔ rclone config updated`);
+console.log("rclone config updated");

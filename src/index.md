@@ -1,50 +1,71 @@
----
-head:
-  - - meta
-    - name: robots
-      content: index,follow
-
-  - - link
-    - rel: canonical
-      href: https://languifyjs.erikmarques.com.br/v1/docs
----
-
 # languify.js
 
-A JavaScript library that brings language-inspired features from multiple programming paradigms into one unified toolkit.
+**languify.js** brings useful ideas from other programming languages into
+JavaScript and TypeScript.
 
-Instead of following a single language style, languify.js explores ideas from Rust, Go, functional programming, and other ecosystems — adapting them into JavaScript in a consistent and composable way.
+The library is not limited to Rust-inspired utilities. Rust is one influence
+among many. The goal is broader: collect the best practical patterns from any
+language ecosystem, adapt them to JavaScript, and expose them through small,
+typed, modular APIs.
 
-## Why languify.js?
+## What languify.js is
 
-JavaScript is flexible, but often lacks structured primitives for expressing control flow, state, and composition in a predictable way.
+languify.js is an extensible toolkit for developers who want expressive control
+flow, safer value handling, and familiar abstractions without leaving the
+JavaScript runtime.
 
-languify.js aims to bring clarity by introducing concepts inspired by different languages, without locking you into a single paradigm.
+Current modules include:
 
-## Design philosophy
+- Rust-inspired `Option`, `Result`, and `match`
+- Java-inspired `Optional` and `NullPointerException`
 
-- Borrow useful ideas from multiple languages
-- Keep APIs consistent and composable
-- Avoid language dogma
-- Prefer explicit behavior over implicit magic
-- Adapt concepts to JavaScript, not copy them blindly
+Future modules can draw from any language when the abstraction improves
+JavaScript code.
 
-## Core idea
+## Why it exists
 
-Instead of asking “how does Rust do this?” or “how does Go do this?”, languify.js asks:
+JavaScript is flexible, but many teams still rebuild the same patterns around
+nullable values, error handling, branching, and fallback logic. Other languages
+have spent years refining those patterns.
 
-> “what is the most useful abstraction for JavaScript developers?”
+languify.js gives those ideas a JavaScript home:
 
-## Example
+- `Option` makes present and absent values explicit.
+- `Result` models operations that can succeed or fail.
+- `match` centralizes branching logic.
+- `Optional` provides a Java-style container for nullable values.
+
+## Quick example
 
 ```ts
-import { Some, None, match } from "languify.js/rust";
+import { Some, match } from "languify.js/rust";
 
 const value = Some("languify");
 
 const result = match(value, {
-  Some: (v) => v.toUpperCase(),
+  Some: (text) => text.toUpperCase(),
   None: () => "empty",
 });
 
 console.log(result);
+// LANGUIFY
+```
+
+## Design principles
+
+- Borrow useful ideas from any programming language.
+- Adapt concepts to JavaScript instead of copying blindly.
+- Keep modules independent and tree-shakeable.
+- Prefer predictable runtime behavior.
+- Use TypeScript types to make intent visible.
+- Leave room for new languages and paradigms.
+
+## Where to start
+
+Install the package in [Getting started](/getting-started), then explore the
+current language modules:
+
+- [Rust Option](/rust/option)
+- [Rust Result](/rust/result)
+- [Pattern matching](/rust/match)
+- [Java Optional](/java/optional)

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" role="img" aria-label="languify.js social preview">
+  <defs>
+    <linearGradient id="card-bg" x1="120" x2="1080" y1="80" y2="560" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0b1418" />
+      <stop offset="0.65" stop-color="#12242c" />
+      <stop offset="1" stop-color="#211b11" />
+    </linearGradient>
+    <linearGradient id="card-mark" x1="90" x2="250" y1="120" y2="280" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#56f0c2" />
+      <stop offset="0.55" stop-color="#38bdf8" />
+      <stop offset="1" stop-color="#f6b44b" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#card-bg)" />
+  <rect x="76" y="94" width="174" height="174" rx="34" fill="#071014" stroke="#24434b" stroke-width="2" />
+  <path d="M120 218v-82h24v60h58v22h-82Z" fill="url(#card-mark)" />
+  <path d="M168 139h32v32h-15v-16h-17v-16Zm17 61h15v32h-32v-16h17v-16Z" fill="#d7fff3" />
+  <text x="76" y="372" fill="#f6fbf8" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="76" font-weight="800">
+    languify.js
+  </text>
+  <text x="80" y="438" fill="#b8d7d0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="34" font-weight="500">
+    Language-inspired utilities for JavaScript and TypeScript.
+  </text>
+  <text x="80" y="500" fill="#83f2d0" font-family="Inter, ui-sans-serif, system-ui, sans-serif" font-size="28" font-weight="700">
+    Option - Result - match - Optional - extensible by design
+  </text>
+  <path d="M900 126h160v36H900v-36Zm-72 118h232v36H828v-36Zm72 118h160v36H900v-36Z" fill="#38bdf8" opacity="0.34" />
+  <path d="M840 152h46m188 0h46M840 270h-34m268 0h46M840 388h46m188 0h46" stroke="#56f0c2" stroke-width="10" stroke-linecap="round" />
+</svg>

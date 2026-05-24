@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="languify.js logo">
+  <defs>
+    <linearGradient id="languify-logo" x1="10" x2="54" y1="8" y2="56" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#56f0c2" />
+      <stop offset="0.55" stop-color="#38bdf8" />
+      <stop offset="1" stop-color="#f6b44b" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="14" fill="#0b1418" />
+  <path
+    d="M18 46V16h8v23h18v7H18Z"
+    fill="url(#languify-logo)"
+  />
+  <path
+    d="M35 17h10v10h-5v-5h-5v-5Zm5 20h5v10H35v-5h5v-5Z"
+    fill="#d7fff3"
+  />
+  <path
+    d="M33 25h-7v7h7v-7Zm5 0h7v7h-7v-7Z"
+    fill="#0b1418"
+    opacity="0.9"
+  />
+</svg>

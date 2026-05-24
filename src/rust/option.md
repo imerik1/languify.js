@@ -1,214 +1,103 @@
 # Option
 
-The `Option` type represents an optional value.
+`Option` represents a value that may or may not exist.
 
-Every `Option` is either:
+It is inspired by Rust's `Option<T>` and gives JavaScript and TypeScript code a
+clearer alternative to scattered `null` and `undefined` checks.
 
-* `Some` → contains a value
-* `None` → represents absence of a value
+## Concepts
 
-Inspired by Rust's `Option`.
+An option has two states:
 
-It provides a safe and expressive alternative to manual `null` and `undefined` handling.
-
-## ✨ Overview
+- `Some`: a value is present
+- `None`: no value is present
 
 ```ts
-Some<T>  // contains a value
-None     // represents absence
+import { None, Some } from "languify.js/rust";
+
+const present = Some("hello");
+const missing = None;
 ```
 
-## 📦 Creating an Option
+## Creating Some
 
-### Creating `Some`
-
-Use `Some(value)` to wrap an existing value.
+Use `Some(value)` when a value exists.
 
 ```ts
 import { Some } from "languify.js/rust";
 
 const value = Some("hello");
+
+console.log(value.unwrap());
+// hello
 ```
 
-### Using `None`
+## Using None
 
-Use `None` to represent absence.
+Use `None` when a value is absent.
 
 ```ts
 import { None } from "languify.js/rust";
 
 const value = None;
-```
-
-## 🔄 Matching values
-
-### Instance matching
-
-Every `Option` supports `.match()`.
-
-```ts
-import { Some } from "languify.js/rust";
-
-const result = Some("world").match({
-  Some: (value) => `Hello ${value}`,
-  None: () => "Nothing here"
-});
-
-console.log(result);
-// "Hello world"
-```
-
-### Matching `None`
-
-```ts
-import { None } from "languify.js/rust";
-
-const result = None.match({
-  Some: (value) => value,
-  None: () => "empty"
-});
-
-console.log(result);
-// "empty"
-```
-
-### Using direct values
-
-Match branches may also use direct values.
-
-```ts
-import { Some, None } from "languify.js/rust";
-
-Some("hello").match({
-  Some: "present",
-  None: "empty"
-});
-
-None.match({
-  Some: "present",
-  None: "empty"
-});
-```
-
-## 📤 Extracting values
-
-### unwrap()
-
-Returns the wrapped value.
-
-```ts
-import { Some } from "languify.js/rust";
-
-const value = Some("test");
 
 console.log(value.unwrap());
-// "test"
-```
-
-```ts
-import { None } from "languify.js/rust";
-
-console.log(None.unwrap());
 // null
 ```
 
-## 🔁 Fallback values
+## Matching an Option
 
-### unwrapOr()
-
-Returns a fallback value.
-
-```ts
-import { None } from "languify.js/rust";
-
-const value = None.unwrapOr("fallback");
-
-console.log(value);
-// "fallback"
-```
-
-When a value exists:
+Every `Option` instance has a `.match()` method.
 
 ```ts
 import { Some } from "languify.js/rust";
 
-const value = Some("hello")
-  .unwrapOr("fallback");
-
-console.log(value);
-// "hello"
-```
-
-## 🔄 JSON serialization
-
-`Option` serializes to its contained value.
-
-```ts
-import { Some, None } from "languify.js/rust";
-
-JSON.stringify(Some("hello"));
-// "\"hello\""
-
-JSON.stringify(None);
-// "null"
-```
-
-## 🚀 Example
-
-```ts
-import { Some, None } from "languify.js/rust";
-
-function getUser(name: string) {
-  if (name === "test") {
-    return Some(name);
-  }
-
-  return None;
-}
-
-const user = getUser("test");
-
-const message = user.match({
-  Some: (value) => `Welcome ${value}`,
-  None: () => "User not found"
+const message = Some("world").match({
+  Some: (value) => `Hello ${value}`,
+  None: () => "Nothing here",
 });
 
 console.log(message);
+// Hello world
 ```
 
-## ✅ Using the standalone `match()` helper
+`None` runs the `None` branch:
 
-The standalone `match()` helper also supports `Option`.
+```ts
+import { None } from "languify.js/rust";
+
+const message = None.match({
+  Some: (value) => `Hello ${value}`,
+  None: () => "No value",
+});
+
+console.log(message);
+// No value
+```
+
+::: warning
+Instance `.match()` expects callbacks for both branches. Direct branch values are
+supported by the standalone `match()` helper for primitive nullable values, not
+by `Option.match()`.
+:::
+
+## Using the Standalone Match Helper
+
+The standalone `match()` helper also works with `Option` instances:
 
 ```ts
 import { match, Some } from "languify.js/rust";
 
-const value = match(Some("test"), {
+const result = match(Some("test"), {
   Some: (value) => value.toUpperCase(),
-  None: () => "EMPTY"
+  None: () => "EMPTY",
 });
 
-console.log(value);
-// "TEST"
+console.log(result);
+// TEST
 ```
 
-Direct values are also supported.
-
-```ts
-import { match } from "languify.js/rust";
-
-const value = match(null, {
-  Some: "has_value",
-  None: "empty"
-});
-
-console.log(value);
-// "empty"
-```
-
-## 🧠 Matching nullable values
-
-The standalone `match()` helper can work directly with primitive nullable values.
+It can also match primitive nullable values with `Some` and `None` semantics:
 
 ```ts
 import { match } from "languify.js/rust";
@@ -217,25 +106,106 @@ const username: string | null = null;
 
 const message = match(username, {
   Some: (value) => `Hello ${value}`,
-  None: () => "No username"
+  None: () => "No username",
 });
 
 console.log(message);
-// "No username"
+// No username
 ```
 
-Supported primitive inputs:
+For primitive values, branches may be callbacks or direct values:
 
-* `string`
-* `number`
-* `symbol`
-* `null`
+```ts
+import { match } from "languify.js/rust";
 
-## ⚠️ Important notes
+const status = match("ready", {
+  Some: "has value",
+  None: "empty",
+});
 
-* `Some` represents a present value.
-* `None` represents absence.
-* `Option` supports instance `.match()`.
-* `match()` helper also supports `Option`.
-* Match branches may be callbacks or direct values.
-* `Option` serializes to JSON automatically.
+console.log(status);
+// has value
+```
+
+## Extracting Values
+
+Use `unwrap()` to return the wrapped value.
+
+```ts
+import { Some } from "languify.js/rust";
+
+const value = Some("test").unwrap();
+
+console.log(value);
+// test
+```
+
+`None.unwrap()` returns `null`.
+
+```ts
+import { None } from "languify.js/rust";
+
+console.log(None.unwrap());
+// null
+```
+
+## Fallback Values
+
+Use `unwrapOr()` to return a fallback when the option is empty.
+
+```ts
+import { None, Some } from "languify.js/rust";
+
+console.log(None.unwrapOr("fallback"));
+// fallback
+
+console.log(Some("hello").unwrapOr("fallback"));
+// hello
+```
+
+## JSON Serialization
+
+`Option` serializes to the contained value or `null`.
+
+```ts
+import { None, Some } from "languify.js/rust";
+
+JSON.stringify(Some("hello"));
+// "\"hello\""
+
+JSON.stringify(None);
+// "null"
+```
+
+## Example
+
+```ts
+import { None, Some } from "languify.js/rust";
+
+function findUser(name: string) {
+  if (name === "Ada") {
+    return Some({ name });
+  }
+
+  return None;
+}
+
+const user = findUser("Ada");
+
+const message = user.match({
+  Some: (value) => `Welcome ${value.name}`,
+  None: () => "User not found",
+});
+
+console.log(message);
+// Welcome Ada
+```
+
+## Notes
+
+- `Some` represents a present value.
+- `None` represents absence.
+- `Option.match()` handles `Some` and `None` through callbacks.
+- The standalone `match()` helper works with `Option` and primitive nullable
+  values.
+- `Option` serializes to JSON automatically.

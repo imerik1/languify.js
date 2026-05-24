@@ -1,24 +1,29 @@
 {
   "name": "languify.js",
   "version": "1.0.5",
-  "description": "Language-inspired functional utilities for JavaScript and TypeScript.",
+  "description": "Extensible language-inspired utilities for JavaScript and TypeScript.",
   "type": "module",
   "keywords": [
     "oop",
     "functional-programming",
     "pattern-matching",
+    "language-inspired",
     "option",
+    "result",
     "rust",
     "java",
     "optional",
+    "null-safety",
     "golang",
+    "python",
+    "kotlin",
     "typescript",
     "javascript",
     "fp",
     "match",
     "languify"
   ],
-  "homepage": "https://languifyjs.erikmarques.com.br/v1/docs",
+  "homepage": "https://languifyjs.erikmarques.com.br/v1/docs/",
   "bugs": {
     "url": "https://github.com/imerik1/languify.js/issues"
   },

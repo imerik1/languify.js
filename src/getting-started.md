@@ -1,62 +1,114 @@
-# 📘 Getting Started
+# Getting Started
 
-Welcome to **languify.js** — a lightweight toolkit for pattern matching, functional utilities, and language-inspired constructs like `Option`, `match`, and more.
+Use **languify.js** when you want language-inspired utilities in JavaScript or
+TypeScript without adopting a new runtime, compiler, or framework.
 
-This guide will help you install and start using the package in your project.
+The package is split by language module. Import only the module that owns the
+concept you need.
 
-## 📦 Installation
-
-Install the package via your preferred package manager:
+## Installation
 
 :::tabs
 == npm
+
 ```bash
 npm install languify.js@^1
 ```
+
 == pnpm
+
 ```bash
 pnpm add languify.js@^1
 ```
+
 == yarn
+
 ```bash
 yarn add languify.js@^1
 ```
+
 :::
 
-## 🚀 Quick Start
+## Rust-Inspired Utilities
 
-After installation, you can import utilities from the package:
+The Rust-inspired module currently exports `Option`, `Result`, and `match`.
 
 ```ts
-import { Some, None, match } from "languify.js/rust";
+import { Some, match } from "languify.js/rust";
 
 const value = Some("hello world");
 
 const result = match(value, {
-  Some: (v) => v.toUpperCase(),
+  Some: (text) => text.toUpperCase(),
   None: () => "empty",
 });
 
-console.log(result); // HELLO WORLD;
+console.log(result);
+// HELLO WORLD
 ```
 
-## 🧠 What you get
+## Java-Inspired Utilities
 
-languify.js provides:
+The Java-inspired module currently exports `Optional` and
+`NullPointerException`.
 
-* Functional utilities inspired by others languages
-* Multi-style APIs (Rust, Go, etc.)
+```ts
+import { Optional } from "languify.js/java";
 
-## 📁 Import styles
+const username = Optional.ofNullable("erik")
+  .map((value) => value?.toUpperCase())
+  .orElse("guest");
 
-You can import by language module:
+console.log(username);
+// ERIK
+```
+
+## Import Styles
+
+Import a single utility when you want the smallest surface:
 
 ```ts
 import { match } from "languify.js/rust";
 ```
 
-or
+Import a module namespace when it reads better in the calling code:
 
 ```ts
 import * as rust from "languify.js/rust";
+
+const value = rust.Some("hello");
 ```
+
+## Choosing a Utility
+
+Use `Option` when a value may be present or absent:
+
+```ts
+import { None, Some } from "languify.js/rust";
+
+const user = Math.random() > 0.5 ? Some("Ada") : None;
+```
+
+Use `Result` when an operation can succeed or fail and you want to keep the
+error value:
+
+```ts
+import { Result } from "languify.js/rust";
+
+const response = await Result.ok("saved");
+```
+
+Use `Optional` when a Java-style nullable container fits the codebase:
+
+```ts
+import { Optional } from "languify.js/java";
+
+const name = Optional.ofNullable("Grace").orElse("guest");
+```
+
+## Next Steps
+
+- Learn [Rust Option](/rust/option) for explicit nullable values.
+- Learn [Rust Result](/rust/result) for success and failure flows.
+- Learn [Pattern matching](/rust/match) for centralized branching.
+- Learn [Java Optional](/java/optional) for Java-style nullable handling.

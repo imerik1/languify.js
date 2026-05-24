@@ -15,8 +15,8 @@ try {
   console.log(`Pushing ${tag}...`);
   execSync(`git push origin ${tag}`, { stdio: "inherit" });
 
-  console.info(`✅ Tag ${tag} pushed.`);
+  console.info(`Tag ${tag} pushed.`);
 } catch (err) {
-  console.error(`❌ `, err);
+  console.error("Tag push failed.", err);
   process.exit(1);
 }

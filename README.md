@@ -1,48 +1,43 @@
-# 📘 languify.js
+# languify.js
 
-**languify.js** is a lightweight toolkit for pattern matching, functional utilities, and language-inspired constructs such as `Option`, `match`, and more.
+**languify.js** is an extensible TypeScript toolkit that brings strong ideas from
+other programming languages into JavaScript.
 
-## 📚 Documentation
+It is not a Rust compatibility layer. Rust is only one source of inspiration.
+The project is designed to grow through language modules that adapt useful
+patterns from any ecosystem into idiomatic, typed, tree-shakeable JavaScript.
 
-Full documentation:
+## Documentation
+
+Production documentation is available at:
 
 https://languifyjs.erikmarques.com.br/v1/docs/
 
----
-
-## 📦 Installation
-
-### npm
+## Installation
 
 ```bash
 npm install languify.js@^1
 ```
 
-### pnpm
-
 ```bash
 pnpm add languify.js@^1
 ```
-
-### yarn
 
 ```bash
 yarn add languify.js@^1
 ```
 
----
+## Quick Start
 
-## 🚀 Quick Start
-
-Import utilities from the desired language module.
+Import the utilities from the language module that owns the concept.
 
 ```ts
-import { Some, None, match } from "languify.js/rust";
+import { Some, match } from "languify.js/rust";
 
 const value = Some("hello world");
 
 const result = match(value, {
-  Some: (v) => v.toUpperCase(),
+  Some: (text) => text.toUpperCase(),
   None: () => "empty",
 });
 
@@ -50,35 +45,57 @@ console.log(result);
 // HELLO WORLD
 ```
 
----
-
-## ✨ Features
-
-languify.js provides:
-
-- Pattern matching utilities
-- Functional primitives inspired by modern languages
-- Language-style APIs (`Rust`, `Go`, and more)
-- Modular imports
-
----
-
-## 📁 Import Styles
-
-Import directly from a language module:
+Java-inspired utilities are exposed from their own module:
 
 ```ts
-import { match } from "languify.js/rust";
+import { Optional } from "languify.js/java";
+
+const label = Optional.ofNullable("languify")
+  .map((value) => value?.toUpperCase())
+  .orElse("DEFAULT");
+
+console.log(label);
+// LANGUIFY
 ```
 
-Or import the entire module namespace:
+## Current Modules
 
-```ts
-import * as rust from "languify.js/rust";
+- `languify.js/rust`: `Option`, `Result`, and `match`
+- `languify.js/java`: `Optional` and `NullPointerException`
+
+## Philosophy
+
+languify.js searches across programming languages for practical ideas that make
+JavaScript and TypeScript code clearer. Each feature should feel familiar to
+developers who know the source language, but the final API must still make sense
+inside JavaScript.
+
+The project favors:
+
+- typed public APIs
+- modular imports
+- predictable runtime behavior
+- small, composable primitives
+- room for future language modules without forcing one paradigm on the whole library
+
+## Production Build
+
+The package build is generated with `tsup`:
+
+```bash
+pnpm lib:build
 ```
 
----
+The documentation site is generated with VitePress:
 
-## 🌍 Philosophy
+```bash
+pnpm docs:build
+```
 
-languify.js brings familiar programming patterns from multiple languages into the JavaScript ecosystem while keeping the API lightweight, composable, and tree-shakeable.
+The docs build writes versioned output to `dist/site/v1/docs` and then copies
+root-level public site files from `ci/site` into `dist/site`.
+
+## Contributing
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for local workflow, documentation
+rules, module guidelines, and release notes.

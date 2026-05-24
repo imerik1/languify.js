@@ -14,9 +14,14 @@ const version = ref("");
 
 onMounted(async () => {
   const response = await fetch("/versions.json");
+
+  if (!response.ok) {
+    return;
+  }
+
   const tags: Item[] = await response.json();
 
-  for (let tag of tags) {
+  for (const tag of tags) {
     items.value.push({
       text: tag.text,
       link: `${location.protocol}//${location.host}${tag.link}`,

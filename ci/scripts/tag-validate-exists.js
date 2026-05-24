@@ -11,8 +11,8 @@ try {
   execSync("git fetch --tags", { stdio: "inherit" });
   execSync(`git rev-parse "${tag}"`, { stdio: "ignore" });
 
-  console.error(`❌ Tag ${tag} already exists.`);
+  console.error(`Tag ${tag} already exists.`);
   process.exit(1);
 } catch {
-  console.log(`✅ Tag ${tag} does not exist.`);
+  console.log(`Tag ${tag} does not exist.`);
 }

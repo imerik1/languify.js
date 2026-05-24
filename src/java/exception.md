@@ -1,20 +1,12 @@
 # NullPointerException
 
-The `NullPointerException` helper provides a Java-inspired exception for missing values.
+`NullPointerException` is a Java-inspired error for operations that require a
+non-null value.
 
-It is commonly used when an operation requires a non-null value but receives `null` or `undefined`.
+Use it when `null` or `undefined` should fail immediately instead of moving
+through the rest of the program.
 
-## ✨ Overview
-
-```ts
-import { NullPointerException } from "languify.js/java";
-
-throw new NullPointerException();
-```
-
-## 📦 Basic usage
-
-### Throwing manually
+## Throwing Manually
 
 ```ts
 import { NullPointerException } from "languify.js/java";
@@ -22,12 +14,12 @@ import { NullPointerException } from "languify.js/java";
 throw new NullPointerException();
 ```
 
-### Using inside custom validation
+## Validating Required Values
 
 ```ts
 import { NullPointerException } from "languify.js/java";
 
-function required(value: unknown) {
+function required<T>(value: T | null | undefined): T {
   if (value === null || value === undefined) {
     throw new NullPointerException();
   }
@@ -36,13 +28,27 @@ function required(value: unknown) {
 }
 ```
 
-## 🧠 When to use
+## Using with Optional
+
+`Optional.of()` throws `NullPointerException` when it receives a nullish value.
+
+```ts
+import { Optional } from "languify.js/java";
+
+const value = null as unknown as string;
+
+Optional.of(value);
+// throws NullPointerException
+```
+
+## When to Use It
 
 Use `NullPointerException` when:
 
 - a value is required
-- `null` is considered invalid input
-- missing values should fail immediately
+- `null` and `undefined` are invalid input
+- failing immediately is clearer than returning an empty value
+- you are building a Java-inspired API surface
 
 ```ts
 import { NullPointerException } from "languify.js/java";

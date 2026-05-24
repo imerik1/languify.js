@@ -1,4 +1,4 @@
-# Summary
+## Summary
 
 Describe the changes introduced by this pull request.
 
@@ -6,9 +6,7 @@ Example:
 
 - add Rust `Result` helpers
 - improve `match()` typing
-- fix documentation typo
-
----
+- add SEO metadata for a documentation page
 
 ## Type of change
 
@@ -22,8 +20,6 @@ Please select the relevant option(s).
 - [ ] Tests
 - [ ] CI / Build / Tooling
 
----
-
 ## Changes
 
 What was changed?
@@ -32,21 +28,18 @@ What was changed?
 - 
 - 
 
----
-
 ## Checklist
 
 - [ ] Tests pass
-- [ ] Build succeeds
+- [ ] `pnpm lib:build` succeeds for package changes
+- [ ] `pnpm docs:build` succeeds for documentation or site changes
 - [ ] Documentation updated (if applicable)
-
----
+- [ ] New docs pages were added to the VitePress sidebar and SEO map
+- [ ] Public API changes are exported from the module entrypoint
 
 ## Related issue
 
 Link the related issue if applicable.
-
----
 
 ## Additional notes
 

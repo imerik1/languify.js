@@ -1,148 +1,170 @@
 # match
 
-The `match` helper provides a unified way to safely handle:
+`match` provides a single helper for predictable branching in JavaScript and
+TypeScript.
 
-* `Option`
-* `Result`
-* primitive nullable values
-* custom matchable classes
+It can work with:
 
-Inspired by Rust pattern matching.
+- `Option`
+- `Result`
+- primitive nullable values
+- custom classes that implement `.match()`
 
-## Basic usage
+The idea is inspired by Rust pattern matching, but the implementation is adapted
+to JavaScript values and TypeScript inference.
+
+## Basic Shape
 
 ```ts
-match(value, {
-  Some: (value) => {},
-  None: () => {}
-});
+import { match } from "languify.js/rust";
 
-match(result, {
-  Ok: (value) => {},
-  Err: (error) => {}
+const output = match(value, {
+  Some: (value) => value,
+  None: () => "empty",
 });
 ```
 
-## Option matching
+The selected branch returns the final value.
 
-### Using callbacks
+## Matching Option
+
+Use `Some` and `None` branches for `Option` values.
 
 ```ts
-import { match, Some, None } from "languify.js/rust";
+import { match, None, Some } from "languify.js/rust";
 
-match(Some("hello"), {
+const present = match(Some("hello"), {
   Some: (value) => value.toUpperCase(),
   None: () => "empty",
 });
-// "HELLO"
 
-match(None, {
-  Some: () => "has_value",
+console.log(present);
+// HELLO
+
+const missing = match(None, {
+  Some: () => "has value",
   None: () => "empty",
 });
-// "empty"
+
+console.log(missing);
+// empty
 ```
 
-### Using direct values (supported)
+## Matching Result
 
-Callbacks remain supported, but direct values can also be used.
-
-```ts
-match("hello", {
-  Some: "has_value",
-  None: "empty",
-});
-// "has_value"
-
-match(null, {
-  Some: "has_value",
-  None: "empty",
-});
-// "empty"
-```
-
-## Result matching
+Use `Ok` and `Err` branches for `Result` values.
 
 ```ts
 import { match, Result } from "languify.js/rust";
 
-const response = await Result.ok("success");
+const response = await Result.ok<string, string>("success");
 
-match(response, {
+const output = match(response, {
   Ok: (value) => value,
   Err: (error) => `Error: ${error}`,
 });
-// "success"
+
+console.log(output);
+// success
 ```
 
 ```ts
-const response = await Result.error("failure");
+import { match, Result } from "languify.js/rust";
 
-match(response, {
+const response = await Result.error<string, string>("failure");
+
+const output = match(response, {
   Ok: () => "success",
   Err: (error) => `Error: ${error}`,
 });
-// "Error: failure"
+
+console.log(output);
+// Error: failure
 ```
 
-## Primitive nullable values
+## Matching Primitive Nullable Values
 
-Primitive values are treated like `Option` semantics.
+Primitive non-nullish values are treated as `Some`. `null` is treated as `None`.
 
 ```ts
-match("john", {
+import { match } from "languify.js/rust";
+
+const greeting = match("john", {
   Some: (value) => `Hello ${value}`,
   None: () => "No username",
 });
-// "Hello john"
+
+console.log(greeting);
+// Hello john
 ```
 
 ```ts
-match(null, {
+import { match } from "languify.js/rust";
+
+const greeting = match(null, {
   Some: () => "Has value",
   None: () => "Missing",
 });
-// "Missing"
+
+console.log(greeting);
+// Missing
 ```
 
-Supported primitive inputs:
-
-* `string`
-* `number`
-* `symbol`
-* `null`
-
-## Custom matchable classes
-
-Any object implementing `.match()` is supported.
+For primitive nullable values, branches may also be direct values:
 
 ```ts
-class Custom {
+import { match } from "languify.js/rust";
+
+const state = match("ready", {
+  Some: "has value",
+  None: "empty",
+});
+
+console.log(state);
+// has value
+```
+
+Supported primitive inputs are:
+
+- `string`
+- `number`
+- `symbol`
+- `null`
+
+## Matching Custom Classes
+
+Any object implementing `.match()` can be consumed by the standalone `match()`
+helper.
+
+```ts
+import { match } from "languify.js/rust";
+
+class Company {
   constructor(private readonly value: string) {}
 
   match<T>(cases: {
-    1: (value: string) => T;
-    2: (value: string) => T;
+    Known: (value: string) => T;
+    Unknown: (value: string) => T;
   }) {
-    return this.value === "google"
-      ? cases[1](this.value)
-      : cases[2](this.value);
+    return this.value === "languify"
+      ? cases.Known(this.value)
+      : cases.Unknown(this.value);
   }
 }
 
-match(new Custom("google"), {
-  1: (value) => `${value} Employee`,
-  2: (value) => `${value} Employee`,
+const label = match(new Company("languify"), {
+  Known: (value) => `${value} project`,
+  Unknown: (value) => `${value} external`,
 });
-// "google Employee"
-```
 
-Type inference is preserved automatically.
+console.log(label);
+// languify project
+```
 
 ## Notes
 
-* Existing callback-based usage remains supported.
-* Direct values for `Some` and `None` are also supported.
-* `Some` / `Ok` represent successful states.
-* `None` / `Err` represent absence or failure.
-* Any object implementing `.match()` can participate in matching.
+- `match()` delegates to `.match()` when the value provides one.
+- `Some` and `Ok` represent successful or present states.
+- `None` and `Err` represent missing or failed states.
+- Direct branch values are supported for primitive nullable matching.
+- Custom matchable classes decide their own branch names and branch behavior.

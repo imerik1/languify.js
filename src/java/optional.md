@@ -1,22 +1,13 @@
 # Optional
 
-The `Optional` helper provides a Java-inspired way to safely handle nullable values.
+`Optional` provides a Java-inspired container for values that may be present or
+empty.
 
-It helps avoid manual `null` and `undefined` checks by wrapping values inside an optional container.
+Use it when a Java-style API reads naturally in your JavaScript or TypeScript
+codebase and you want methods for presence checks, fallbacks, side effects, and
+transformations.
 
-## ✨ Overview
-
-```ts
-import { Optional } from "languify.js/java";
-
-const value = Optional.of("hello");
-
-console.log(value.get()); // "hello"
-```
-
-## 📦 Creating Optional values
-
-### Creating a non-null optional
+## Creating Optional Values
 
 Use `Optional.of()` when the value must exist.
 
@@ -25,139 +16,134 @@ import { Optional } from "languify.js/java";
 
 const value = Optional.of("hello");
 
-console.log(value.get()); // "hello"
+console.log(value.get());
+// hello
 ```
 
-### Creating a nullable optional
+`Optional.of()` throws `NullPointerException` for `null` or `undefined`.
+
+```ts
+import { Optional } from "languify.js/java";
+
+const value = null as unknown as string;
+
+Optional.of(value);
+// throws NullPointerException
+```
 
 Use `Optional.ofNullable()` when the value may be absent.
 
 ```ts
 import { Optional } from "languify.js/java";
 
-const value = Optional.ofNullable(null);
+const value = Optional.ofNullable<string>(null);
 
-console.log(value.isEmpty()); // true
+console.log(value.isEmpty());
+// true
 ```
 
-### Creating an empty optional
+Use `Optional.empty()` when you already know the value is absent.
 
 ```ts
 import { Optional } from "languify.js/java";
 
-const value = Optional.empty();
+const value = Optional.empty<string>();
 
-console.log(value.isEmpty()); // true
+console.log(value.isEmpty());
+// true
 ```
 
-## 🔍 Presence checks
+## Presence Checks
 
-### Checking if a value exists
+Use `isPresent()` to check for a value.
+
+```ts
+import { Optional } from "languify.js/java";
+
+console.log(Optional.of("hello").isPresent());
+// true
+```
+
+Use `isEmpty()` to check for absence.
+
+```ts
+import { Optional } from "languify.js/java";
+
+console.log(Optional.empty().isEmpty());
+// true
+```
+
+## Extracting Values
+
+Use `get()` to return the stored value.
 
 ```ts
 import { Optional } from "languify.js/java";
 
 const value = Optional.of("hello");
 
-console.log(value.isPresent()); // true
+console.log(value.get());
+// hello
 ```
 
-### Checking if a value is empty
+For empty values, prefer fallback methods instead of relying on `get()`.
+
+## Fallback Values
+
+Use `orElse()` when the fallback is already available.
 
 ```ts
 import { Optional } from "languify.js/java";
 
-const value = Optional.empty();
+const value = Optional.empty<string>().orElse("default");
 
-console.log(value.isEmpty()); // true
+console.log(value);
+// default
 ```
 
-## 📥 Extracting values
-
-### Getting the stored value
+Use `orElseGet()` when the fallback should be computed only if needed.
 
 ```ts
 import { Optional } from "languify.js/java";
 
-const value = Optional.of("hello");
+const value = Optional.empty<string>().orElseGet(() => "generated");
 
-console.log(value.get()); // "hello"
+console.log(value);
+// generated
 ```
 
-### Returning a fallback value
-
-Use `orElse()` when a fallback value is available.
+Use `orElseThrow()` when absence is an error.
 
 ```ts
 import { Optional } from "languify.js/java";
 
-const value = Optional.empty<string>()
-  .orElse("default");
+const value = Optional.of("hello").orElseThrow(() => new Error("missing value"));
 
-console.log(value); // "default"
-```
-
-### Returning a computed fallback
-
-Use `orElseGet()` when the fallback should be lazily computed.
-
-```ts
-import { Optional } from "languify.js/java";
-
-const value = Optional.empty<string>()
-  .orElseGet(() => "generated");
-
-console.log(value); // "generated"
-```
-
-### Throwing when empty
-
-Use `orElseThrow()` when a missing value should fail.
-
-```ts
-import { Optional } from "languify.js/java";
-
-const value = Optional.of("hello")
-  .orElseThrow(() => new Error("missing value"));
-
-console.log(value); // "hello"
+console.log(value);
+// hello
 ```
 
 ```ts
 import { Optional } from "languify.js/java";
 
-Optional.empty<string>()
-  .orElseThrow(() => new Error("missing value"));
+Optional.empty<string>().orElseThrow(() => new Error("missing value"));
 // throws Error
 ```
 
-## ⚡ Executing side effects
+## Side Effects
 
-### Using ifPresent()
-
-Runs a callback only when a value exists.
+Use `ifPresent()` to run a callback only when a value exists.
 
 ```ts
 import { Optional } from "languify.js/java";
 
-Optional.of("hello")
-  .ifPresent((value) => {
-    console.log(value);
-  });
+Optional.of("hello").ifPresent((value) => {
+  console.log(value);
+});
 ```
 
-Nothing happens when the optional is empty.
-
-```ts
-import { Optional } from "languify.js/java";
-
-Optional.ofNullable<string>(null)
-  .ifPresent(console.log);
-```
-
-### Using ifPresentOrElse()
-
-Runs one callback when present and another when empty.
+Use `ifPresentOrElse()` to run one callback for present values and another for
+empty values.
 
 ```ts
 import { Optional } from "languify.js/java";
@@ -172,78 +158,59 @@ Optional.of("hello").ifPresentOrElse(
 );
 ```
 
-## 🔄 Transforming values
+## Filtering Values
 
-### Filtering values
-
-Use `filter()` to preserve values matching a condition.
+Use `filter()` to keep the value only when it matches a predicate.
 
 ```ts
 import { Optional } from "languify.js/java";
 
-const result = Optional.of("hello")
-  .filter((value) => value === "hello");
+const result = Optional.of("hello").filter((value) => value === "hello");
 
-console.log(result.get()); // "hello"
+console.log(result.get());
+// hello
 ```
 
-Non-matching values become empty.
+When the predicate fails, the optional becomes empty.
 
 ```ts
 import { Optional } from "languify.js/java";
 
-const result = Optional.of("hello")
-  .filter((value) => value === "world");
+const result = Optional.of("hello").filter((value) => value === "world");
 
-console.log(result.isEmpty()); // true
+console.log(result.isEmpty());
+// true
 ```
 
-### Mapping values
+## Mapping Values
 
-Use `map()` to transform the stored value.
+Use `map()` to transform the stored value into a new `Optional`.
 
 ```ts
 import { Optional } from "languify.js/java";
 
-const result = Optional.of("hello")
-  .map((value) => value?.toUpperCase());
+const result = Optional.of("hello").map((value) => value?.toUpperCase());
 
-console.log(result.get()); // "HELLO"
+console.log(result.get());
+// HELLO
 ```
 
-### Returning another Optional
+## Returning Another Optional
 
-Use `or()` to provide an alternative optional.
+Use `or()` to provide an alternative `Optional`.
 
 ```ts
 import { Optional } from "languify.js/java";
 
-const result = Optional.empty<string>()
-  .or(() => Optional.of("fallback"));
+const result = Optional.empty<string>().or(() => Optional.of("fallback"));
 
-console.log(result.get()); // "fallback"
+console.log(result.get());
+// fallback
 ```
 
-## ⚠️ Null handling
+## JSON Serialization
 
-`Optional.of()` rejects `null` and `undefined`.
-
-```ts
-import { Optional } from "languify.js/java";
-
-Optional.of(null);
-// throws NullPointerException
-```
-
-Use `Optional.ofNullable()` when null values are expected.
-
-```ts
-Optional.ofNullable(null);
-```
-
-## 🔄 JSON serialization
-
-`Optional` serializes to its contained value.
+`Optional` serializes to the contained value or `null`.
 
 ```ts
 import { Optional } from "languify.js/java";
@@ -255,32 +222,12 @@ JSON.stringify(Optional.empty());
 // "null"
 ```
 
-## 🧠 Optional patterns
+## Notes
 
-Use `Optional.of()` when the value must exist.
-
-```ts
-Optional.of("value");
-```
-
-Use `Optional.ofNullable()` when values may be absent.
-
-```ts
-Optional.ofNullable(possibleNullValue);
-```
-
-Use `orElse()` or `orElseGet()` for fallback handling.
-
-```ts
-optional.orElse("default");
-
-optional.orElseGet(() => computeDefault());
-```
-
-Use `orElseThrow()` when absence is considered an error.
-
-```ts
-optional.orElseThrow(
-  () => new Error("required value missing")
-);
-```
+- `Optional.of()` is for required non-null values.
+- `Optional.ofNullable()` is for values that may be absent.
+- `Optional.empty()` creates an empty container.
+- `orElse()` and `orElseGet()` provide safe fallbacks.
+- `orElseThrow()` turns absence into an explicit error.
+- `map()` returns a new `Optional`.
+- `filter()` mutates the current optional by clearing non-matching values.
