@@ -21,7 +21,8 @@ const missing = None;
 
 ## Creating Some
 
-Use `Some(value)` when a value exists.
+Use `Some(value)` when a value exists. `Some` represents presence, so `null`
+and `undefined` are rejected.
 
 ```ts
 import { Some } from "languify.js/rust";
@@ -30,6 +31,15 @@ const value = Some("hello");
 
 console.log(value.unwrap());
 // hello
+```
+
+```ts
+import { Some } from "languify.js/rust";
+
+const value = undefined as unknown as string;
+
+Some(value);
+// throws TypeError
 ```
 
 ## Using None
@@ -204,6 +214,7 @@ console.log(message);
 ## Notes
 
 - `Some` represents a present value.
+- `Some` rejects `null` and `undefined`.
 - `None` represents absence.
 - `Option.match()` handles `Some` and `None` through callbacks.
 - The standalone `match()` helper works with `Option` and primitive nullable

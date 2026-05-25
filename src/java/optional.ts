@@ -11,9 +11,23 @@ import { NullPointerException } from "./exception";
  * - an empty value
  *
  * @template T Stored value type.
+ *
+ * @example
+ * import { Optional } from "languify.js/java";
+ *
+ * const label = Optional.ofNullable("languify")
+ *   .map((value) => value?.toUpperCase())
+ *   .orElse("DEFAULT");
+ *
+ * console.log(label);
+ * // "LANGUIFY"
  */
 export class Optional<T> {
-  constructor(private value: T | null) {}
+  private value: T | null;
+
+  constructor(value: T | null | undefined) {
+    this.value = value ?? null;
+  }
 
   /**
    * Creates an optional containing a non-null value.
@@ -29,7 +43,20 @@ export class Optional<T> {
    * @throws {NullPointerException}
    *
    * @example
-   * Optional.of("hello");
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = Optional.of("hello");
+   *
+   * console.log(value.get());
+   * // "hello"
+   *
+   * @example
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = null as unknown as string;
+   *
+   * Optional.of(value);
+   * // throws NullPointerException
    */
   static of<T>(value: NonNullable<T>) {
     if (value === null || value === undefined) {
@@ -42,7 +69,7 @@ export class Optional<T> {
   /**
    * Creates an optional from a nullable value.
    *
-   * Accepts both present and empty values.
+   * Accepts present values and treats `null` or `undefined` as empty.
    *
    * @template T Stored value type.
    *
@@ -51,10 +78,18 @@ export class Optional<T> {
    * @returns Optional instance.
    *
    * @example
-   * Optional.ofNullable("hello");
-   * Optional.ofNullable(null);
+   * import { Optional } from "languify.js/java";
+   *
+   * const present = Optional.ofNullable("hello");
+   * const missing = Optional.ofNullable<string>(undefined);
+   *
+   * console.log(present.isPresent());
+   * // true
+   *
+   * console.log(missing.isEmpty());
+   * // true
    */
-  static ofNullable<T>(value: T | null) {
+  static ofNullable<T>(value: T | null | undefined) {
     return new Optional(value);
   }
 
@@ -66,7 +101,12 @@ export class Optional<T> {
    * @returns Empty optional.
    *
    * @example
-   * Optional.empty();
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = Optional.empty<string>();
+   *
+   * console.log(value.isEmpty());
+   * // true
    */
   static empty<T>() {
     return new Optional<T>(null);
@@ -78,7 +118,11 @@ export class Optional<T> {
    * @returns Stored value.
    *
    * @example
-   * Optional.of("hello").get();
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = Optional.of("hello").get();
+   *
+   * console.log(value);
    * // "hello"
    */
   get(): NonNullable<T> {
@@ -91,7 +135,11 @@ export class Optional<T> {
    * @returns `true` when the optional contains a value.
    *
    * @example
-   * Optional.of("hello").isPresent();
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = Optional.of("hello").isPresent();
+   *
+   * console.log(value);
    * // true
    */
   isPresent(): boolean {
@@ -104,7 +152,11 @@ export class Optional<T> {
    * @returns `true` when no value is present.
    *
    * @example
-   * Optional.empty().isEmpty();
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = Optional.empty().isEmpty();
+   *
+   * console.log(value);
    * // true
    */
   isEmpty(): boolean {
@@ -117,7 +169,12 @@ export class Optional<T> {
    * @param fn Callback executed with the stored value.
    *
    * @example
-   * Optional.of("hello").ifPresent(console.log);
+   * import { Optional } from "languify.js/java";
+   *
+   * Optional.of("hello").ifPresent((value) => {
+   *   console.log(value.toUpperCase());
+   * });
+   * // "HELLO"
    */
   ifPresent<U>(fn: (value: NonNullable<T>) => U): void {
     if (this.isEmpty()) {
@@ -135,10 +192,13 @@ export class Optional<T> {
    * @param fnElse Empty value callback.
    *
    * @example
-   * Optional.empty().ifPresentOrElse(
-   *   console.log,
-   *   () => console.log("empty")
+   * import { Optional } from "languify.js/java";
+   *
+   * Optional.empty<string>().ifPresentOrElse(
+   *   (value) => console.log(value),
+   *   () => console.log("empty"),
    * );
+   * // "empty"
    */
   ifPresentOrElse(fn: (value: NonNullable<T>) => void, fnElse: () => void): void {
     if (this.isEmpty()) {
@@ -157,7 +217,11 @@ export class Optional<T> {
    * @returns Stored value when present, otherwise the fallback.
    *
    * @example
-   * Optional.empty().orElse("default");
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = Optional.empty<string>().orElse("default");
+   *
+   * console.log(value);
    * // "default"
    */
   orElse(otherValue: NonNullable<T>): NonNullable<T> {
@@ -172,7 +236,12 @@ export class Optional<T> {
    * @returns Stored value when present, otherwise the computed value.
    *
    * @example
-   * Optional.empty().orElseGet(() => "default");
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = Optional.empty<string>().orElseGet(() => "generated");
+   *
+   * console.log(value);
+   * // "generated"
    */
   orElseGet(fn: () => NonNullable<T>): NonNullable<T> {
     return this.isEmpty() ? fn() : (this.value as NonNullable<T>);
@@ -181,20 +250,29 @@ export class Optional<T> {
   /**
    * Returns the stored value or throws a custom error.
    *
-   * @template T Error type.
+   * @template E Error type.
    *
    * @param fn Error factory.
    *
    * @returns Stored value.
    *
-   * @throws {T}
+   * @throws {E}
    *
    * @example
-   * Optional.empty().orElseThrow(
-   *   () => new Error("missing value")
-   * );
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = Optional.of("hello").orElseThrow(() => new Error("missing value"));
+   *
+   * console.log(value);
+   * // "hello"
+   *
+   * @example
+   * import { Optional } from "languify.js/java";
+   *
+   * Optional.empty<string>().orElseThrow(() => new Error("missing value"));
+   * // throws Error
    */
-  orElseThrow<T extends Error>(fn: () => T): NonNullable<T> {
+  orElseThrow<E extends Error>(fn: () => E): NonNullable<T> {
     if (this.isEmpty()) {
       throw fn();
     }
@@ -212,8 +290,12 @@ export class Optional<T> {
    * @returns Current optional instance.
    *
    * @example
-   * Optional.of(10)
-   *   .filter((value) => value !== null && value > 5);
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = Optional.of(10).filter((number) => number !== null && number > 5);
+   *
+   * console.log(value.isPresent());
+   * // true
    */
   filter(fn: (value: T | null) => boolean) {
     if (!fn(this.value)) {
@@ -233,8 +315,12 @@ export class Optional<T> {
    * @returns New mapped optional.
    *
    * @example
-   * Optional.of("hello")
-   *   .map((value) => value?.toUpperCase());
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = Optional.of("hello").map((text) => text?.toUpperCase());
+   *
+   * console.log(value.get());
+   * // "HELLO"
    */
   map<U>(fn: (value: T | null) => U): Optional<U> {
     return Optional.ofNullable(fn(this.value));
@@ -249,8 +335,12 @@ export class Optional<T> {
    * @returns Present or fallback optional.
    *
    * @example
-   * Optional.empty()
-   *   .or(() => Optional.of("fallback"));
+   * import { Optional } from "languify.js/java";
+   *
+   * const value = Optional.empty<string>().or(() => Optional.of("fallback"));
+   *
+   * console.log(value.get());
+   * // "fallback"
    */
   or(fn: () => Optional<T>): Optional<T> {
     return this.isEmpty() ? fn() : this;
@@ -260,6 +350,15 @@ export class Optional<T> {
    * Converts the optional into a JSON-compatible value.
    *
    * @returns Stored value or `null`.
+   *
+   * @example
+   * import { Optional } from "languify.js/java";
+   *
+   * JSON.stringify(Optional.of("hello"));
+   * // "\"hello\""
+   *
+   * JSON.stringify(Optional.empty());
+   * // "null"
    */
   toJSON() {
     return this.value;

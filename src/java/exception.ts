@@ -7,10 +7,27 @@
  * but receives `null` or `undefined`.
  *
  * @example
+ * import { NullPointerException } from "languify.js/java";
+ *
  * throw new NullPointerException();
  *
  * @example
- * Optional.of(null);
+ * import { NullPointerException } from "languify.js/java";
+ *
+ * function required<T>(value: T | null | undefined): T {
+ *   if (value === null || value === undefined) {
+ *     throw new NullPointerException();
+ *   }
+ *
+ *   return value;
+ * }
+ *
+ * @example
+ * import { Optional } from "languify.js/java";
+ *
+ * const value = null as unknown as string;
+ *
+ * Optional.of(value);
  * // throws NullPointerException
  */
 export class NullPointerException extends Error {}

@@ -31,12 +31,22 @@ Optional.of(value);
 // throws NullPointerException
 ```
 
-Use `Optional.ofNullable()` when the value may be absent.
+Use `Optional.ofNullable()` when the value may be absent. Both `null` and
+`undefined` are treated as empty.
 
 ```ts
 import { Optional } from "languify.js/java";
 
 const value = Optional.ofNullable<string>(null);
+
+console.log(value.isEmpty());
+// true
+```
+
+```ts
+import { Optional } from "languify.js/java";
+
+const value = Optional.ofNullable<string>(undefined);
 
 console.log(value.isEmpty());
 // true
@@ -225,7 +235,8 @@ JSON.stringify(Optional.empty());
 ## Notes
 
 - `Optional.of()` is for required non-null values.
-- `Optional.ofNullable()` is for values that may be absent.
+- `Optional.ofNullable()` is for values that may be absent as `null` or
+  `undefined`.
 - `Optional.empty()` creates an empty container.
 - `orElse()` and `orElseGet()` provide safe fallbacks.
 - `orElseThrow()` turns absence into an explicit error.

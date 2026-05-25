@@ -5,8 +5,13 @@ describe("rust:option", () => {
     expect(rust.Some("test").unwrap()).toBe("test");
   });
 
+  it("should reject nullish Some values", () => {
+    expect(() => rust.Some(null as unknown as string)).throws(TypeError);
+    expect(() => rust.Some(undefined as unknown as string)).throws(TypeError);
+  });
+
   it("should unwrapOr return value when value exist", () => {
-    expect(rust.Some("test").unwrap()).toBe("test");
+    expect(rust.Some("test").unwrapOr("secondTest")).toBe("test");
   });
 
   it("should unwrapOr return other option when value not exist", () => {

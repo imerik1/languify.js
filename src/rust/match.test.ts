@@ -48,6 +48,15 @@ describe("rust:match", () => {
 
       expect(result).toBe("empty");
     });
+
+    it("should match undefined", () => {
+      const result = rust.match(undefined, {
+        Some: () => "has_value",
+        None: () => "empty",
+      });
+
+      expect(result).toBe("empty");
+    });
   });
 
   describe("Custom", () => {

@@ -84,7 +84,8 @@ console.log(output);
 
 ## Matching Primitive Nullable Values
 
-Primitive non-nullish values are treated as `Some`. `null` is treated as `None`.
+Primitive non-nullish values are treated as `Some`. `null` and `undefined` are
+treated as `None`.
 
 ```ts
 import { match } from "languify.js/rust";
@@ -130,6 +131,7 @@ Supported primitive inputs are:
 - `number`
 - `symbol`
 - `null`
+- `undefined`
 
 ## Matching Custom Classes
 

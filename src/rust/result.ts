@@ -7,6 +7,16 @@
  * @template T Success value type.
  * @template E Error value type.
  * @template U Match result type.
+ *
+ * @example
+ * import { Result } from "languify.js/rust";
+ *
+ * const result = await Result.ok<string, string>("saved");
+ *
+ * const message = result.match({
+ *   Ok: (value) => `Success: ${value}`,
+ *   Err: (error) => `Error: ${error}`,
+ * });
  */
 export type ResultMatch<T, E, U> = {
   Ok: (value: NonNullable<T>) => U;
@@ -27,6 +37,16 @@ export type ResultMatch<T, E, U> = {
  *
  * @template T Success value type.
  * @template E Error value type.
+ *
+ * @example
+ * import { Result } from "languify.js/rust";
+ *
+ * const response = await Result.ok<string, string>("created");
+ *
+ * const output = response.match({
+ *   Ok: (value) => value.toUpperCase(),
+ *   Err: (error) => `Failed: ${error}`,
+ * });
  */
 export class Result<T, E> {
   constructor(
@@ -47,12 +67,17 @@ export class Result<T, E> {
    * @returns Result produced by the selected branch.
    *
    * @example
-   * const result = await Result.ok("hello");
+   * import { Result } from "languify.js/rust";
    *
-   * result.match({
+   * const result = await Result.ok<string, string>("hello");
+   *
+   * const output = result.match({
    *   Ok: (value) => value.toUpperCase(),
-   *   Err: (err) => `Error: ${err}`
+   *   Err: (error) => `Error: ${error}`,
    * });
+   *
+   * console.log(output);
+   * // "HELLO"
    */
   match<U>(cases: ResultMatch<T, E, U>): U {
     return this.ok !== null && this.ok !== undefined
@@ -71,7 +96,11 @@ export class Result<T, E> {
    * @throws {Error | E}
    *
    * @example
-   * const value = (await Result.ok("hello")).unwrap();
+   * import { Result } from "languify.js/rust";
+   *
+   * const value = (await Result.ok<string, Error>("hello")).unwrap();
+   *
+   * console.log(value);
    * // "hello"
    */
   unwrap(): NonNullable<T> {
@@ -90,7 +119,11 @@ export class Result<T, E> {
    * @returns Success value when present, otherwise the fallback.
    *
    * @example
-   * (await Result.error("failure")).unwrapOr("default");
+   * import { Result } from "languify.js/rust";
+   *
+   * const value = (await Result.error<string, string>("failure")).unwrapOr("default");
+   *
+   * console.log(value);
    * // "default"
    */
   unwrapOr(other: NonNullable<T>): NonNullable<T> {
@@ -112,7 +145,12 @@ export class Result<T, E> {
    * @returns Promise resolving to an `Ok` result.
    *
    * @example
-   * const result = await Result.ok("success");
+   * import { Result } from "languify.js/rust";
+   *
+   * const result = await Result.ok<string, Error>("success");
+   *
+   * console.log(result.unwrap());
+   * // "success"
    */
   static ok<T, E>(value: T) {
     return Result.of<T, E>(Promise.resolve(value));
@@ -129,7 +167,17 @@ export class Result<T, E> {
    * @returns Promise resolving to an `Err` result.
    *
    * @example
-   * const result = await Result.error("failure");
+   * import { Result } from "languify.js/rust";
+   *
+   * const result = await Result.error<string, string>("failure");
+   *
+   * const value = result.match({
+   *   Ok: () => "success",
+   *   Err: (error) => error,
+   * });
+   *
+   * console.log(value);
+   * // "failure"
    */
   static error<T, E>(value: E) {
     return Result.of<T, E>(Promise.reject(value));

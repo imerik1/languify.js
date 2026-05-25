@@ -12,8 +12,19 @@ describe("java:optional", () => {
     }).throws(NullPointerException);
   });
 
+  it("should throws creating optional with of() with undefined value", () => {
+    expect(() => {
+      java.Optional.of(undefined as unknown as string);
+    }).throws(NullPointerException);
+  });
+
   it("should create optional with ofNullable()", () => {
     expect(java.Optional.ofNullable("test").get()).toBe("test");
+  });
+
+  it("should treat nullish values as empty with ofNullable()", () => {
+    expect(java.Optional.ofNullable<string>(null).isEmpty()).toBe(true);
+    expect(java.Optional.ofNullable<string>(undefined).isEmpty()).toBe(true);
   });
 
   it("should create empty optional", () => {
