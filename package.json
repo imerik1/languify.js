@@ -1,6 +1,6 @@
 {
   "name": "languify.js",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Extensible language-inspired utilities for JavaScript and TypeScript.",
   "type": "module",
   "keywords": [
