@@ -3,6 +3,7 @@ import { defineConfig } from "tsup";
 export default defineConfig({
   tsconfig: "./tsconfig.build.json",
   entry: {
+    go: "src/go/index.ts",
     rust: "src/rust/index.ts",
     java: "src/java/index.ts",
   },

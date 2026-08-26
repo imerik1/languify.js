@@ -112,3 +112,4 @@ const name = Optional.ofNullable("Grace").orElse("guest");
 - Learn [Rust Result](/rust/result) for success and failure flows.
 - Learn [Pattern matching](/rust/match) for centralized branching.
 - Learn [Java Optional](/java/optional) for Java-style nullable handling.
+- Learn [Go try](/go/try) for Go-style `[ok, err]` error handling.

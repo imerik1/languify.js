@@ -18,6 +18,7 @@ Current modules include:
 
 - Rust-inspired `Option`, `Result`, and `match`
 - Java-inspired `Optional` and `NullPointerException`
+- Go-inspired `go.try()`
 
 Future modules can draw from any language when the abstraction improves
 JavaScript code.
@@ -34,6 +35,7 @@ languify.js gives those ideas a JavaScript home:
 - `Result` models operations that can succeed or fail.
 - `match` centralizes branching logic.
 - `Optional` provides a Java-style container for nullable values.
+- `go.try()` returns function outcomes as `[ok, err]` tuples.
 
 ## Quick example
 
@@ -69,3 +71,4 @@ current language modules:
 - [Rust Result](/rust/result)
 - [Pattern matching](/rust/match)
 - [Java Optional](/java/optional)
+- [Go Try](/go/try)
