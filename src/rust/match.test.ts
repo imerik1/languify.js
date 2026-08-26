@@ -22,8 +22,8 @@ describe("rust:match", () => {
   });
 
   describe("Result", () => {
-    it("should match ok", async () => {
-      const result = rust.match(await rust.Result.ok("test"), {
+    it("should match ok", () => {
+      const result = rust.match(rust.Result.ok("test"), {
         Ok: (value) => value,
         Err: (_) => null,
       });
@@ -31,8 +31,8 @@ describe("rust:match", () => {
       expect(result).toBe("test");
     });
 
-    it("should match err", async () => {
-      const result = rust.match(await rust.Result.error("test"), {
+    it("should match err", () => {
+      const result = rust.match(rust.Result.error("test"), {
         Ok: (value) => value,
         Err: (err) => err,
       });

@@ -95,7 +95,7 @@ error value:
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.ok("saved");
+const response = Result.ok("saved");
 ```
 
 Use `Optional` when a Java-style nullable container fits the codebase:

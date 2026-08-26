@@ -15,8 +15,8 @@ A result has two states:
 ```ts
 import { Result } from "languify.js/rust";
 
-const success = await Result.ok<string, string>("saved");
-const failure = await Result.error<string, string>("failed");
+const success = Result.ok<string, string>("saved");
+const failure = Result.error<string, string>("failed");
 ```
 
 ## Creating Success
@@ -26,7 +26,7 @@ Use `Result.ok(value)` when the operation succeeded.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.ok<string, Error>("hello");
+const response = Result.ok<string, Error>("hello");
 
 console.log(response.unwrap());
 // hello
@@ -39,7 +39,7 @@ Use `Result.error(error)` when the operation failed.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.error<string, string>("failure");
+const response = Result.error<string, string>("failure");
 
 const message = response.match({
   Ok: () => "success",
@@ -57,7 +57,7 @@ Use `.match()` to handle both states explicitly.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.ok<string, Error>("world");
+const response = Result.ok<string, Error>("world");
 
 const message = response.match({
   Ok: (value) => `Hello ${value}`,
@@ -80,7 +80,7 @@ type ApiError = {
   status: number;
 };
 
-const response = await Result.error<string, ApiError>({
+const response = Result.error<string, ApiError>({
   message: "Unauthorized",
   status: 401,
 });
@@ -101,7 +101,7 @@ console.log(output);
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.error<string, Error>(new Error("failure"));
+const response = Result.error<string, Error>(new Error("failure"));
 
 const output = response.match({
   Ok: () => "success",
@@ -119,7 +119,7 @@ Use `unwrap()` when the caller expects success.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.ok<string, Error>("test");
+const response = Result.ok<string, Error>("test");
 
 console.log(response.unwrap());
 // test
@@ -130,7 +130,7 @@ Calling `unwrap()` on `Err` throws the stored error.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.error<string, string>("failure");
+const response = Result.error<string, string>("failure");
 
 response.unwrap();
 // throws "failure"
@@ -143,7 +143,7 @@ Use `unwrapOr()` when a fallback value is acceptable.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.error<string, string>("failure");
+const response = Result.error<string, string>("failure");
 
 console.log(response.unwrapOr("fallback"));
 // fallback
@@ -154,7 +154,7 @@ If the result is `Ok`, the original value is returned.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.ok<string, Error>("test");
+const response = Result.ok<string, Error>("test");
 
 console.log(response.unwrapOr("other"));
 // test
@@ -168,7 +168,7 @@ branch because an `Ok` branch only runs when a success value is present.
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.ok<null, string>(null);
+const response = Result.ok<null, string>(null);
 
 const output = response.match({
   Ok: () => "success",
@@ -186,7 +186,7 @@ The standalone `match()` helper also supports `Result`.
 ```ts
 import { match, Result } from "languify.js/rust";
 
-const response = await Result.ok<string, Error>("test");
+const response = Result.ok<string, Error>("test");
 
 const output = match(response, {
   Ok: (value) => value.toUpperCase(),
@@ -196,6 +196,19 @@ const output = match(response, {
 console.log(output);
 // TEST
 ```
+
+## Async Values
+
+`Result.ok()` and `Result.error()` return a `Result` immediately for ordinary
+values. Pass a promise when the value is asynchronous and await the factory
+result:
+
+```ts
+const response = await Result.ok<string, Error>(fetchName());
+```
+
+If the promise passed to `ok()` rejects, it becomes `Err`. A promise passed to
+`error()` becomes `Err` whether it resolves to or rejects with an error value.
 
 ## Result vs Option
 
@@ -219,7 +232,7 @@ user.match({
 
 ## Notes
 
-- `Result.ok()` and `Result.error()` are async factory helpers.
+- `Result.ok()` and `Result.error()` are synchronous unless passed a promise.
 - `Ok` represents success.
 - `Err` represents failure.
 - `unwrap()` throws when the result is `Err`.
