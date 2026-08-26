@@ -16,15 +16,15 @@ https://languifyjs.erikmarques.com.br
 ## Installation
 
 ```bash
-npm install languify.js@^1
+npm install languify.js
 ```
 
 ```bash
-pnpm add languify.js@^1
+pnpm add languify.js
 ```
 
 ```bash
-yarn add languify.js@^1
+yarn add languify.js
 ```
 
 ## Quick Start
