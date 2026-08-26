@@ -1,6 +1,6 @@
 {
   "name": "languify.js",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Extensible language-inspired utilities for JavaScript and TypeScript.",
   "type": "module",
   "keywords": [
@@ -23,7 +23,7 @@
     "match",
     "languify"
   ],
-  "homepage": "https://languifyjs.erikmarques.com.br/v1/docs/",
+  "homepage": "https://languifyjs.erikmarques.com.br",
   "bugs": {
     "url": "https://github.com/imerik1/languify.js/issues"
   },

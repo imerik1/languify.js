@@ -59,7 +59,7 @@ pnpm lib:build
 ```
 
 The documentation build uses VitePress and writes versioned site output to
-`dist/site/v1/docs`.
+`dist/site/{majorVersion}/docs`.
 
 ```bash
 pnpm docs:build
