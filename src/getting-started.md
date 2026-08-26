@@ -12,19 +12,19 @@ concept you need.
 == npm
 
 ```bash
-npm install languify.js@^1
+npm install languify.js
 ```
 
 == pnpm
 
 ```bash
-pnpm add languify.js@^1
+pnpm add languify.js
 ```
 
 == yarn
 
 ```bash
-yarn add languify.js@^1
+yarn add languify.js
 ```
 
 :::
