@@ -1,7 +1,7 @@
 User-agent: *
-Allow: /v1/docs/
-Allow: /v1/docs/*
-Disallow: /v1/coverage/
+Allow: /v2/docs/
+Allow: /v2/docs/*
+Disallow: /v2/coverage/
 Disallow: /*/coverage/
 
 Sitemap: https://languifyjs.erikmarques.com.br/sitemap.xml

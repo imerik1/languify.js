@@ -71,7 +71,7 @@ pnpm docs:build
 It runs VitePress against `src` and writes versioned output to:
 
 ```txt
-dist/site/v1/docs
+dist/site/{majorVersion}/docs
 ```
 
 After that, `ci/site/*` is copied into:
@@ -93,7 +93,7 @@ Use `ci/site` only for files that must exist at the domain root, such as:
 - `versions.json`
 
 Do not move `robots.txt` only into `src/public`, because that would serve it at
-`/v1/docs/robots.txt` instead of `/robots.txt`.
+`/{majorVersion}/docs/robots.txt` instead of `/robots.txt`.
 
 ## SEO Contract
 

@@ -5,13 +5,14 @@
  */
 const worker = {
   async fetch(request, env, _ctx) {
+    const latestVersion = "v2";
     const url = new URL(request.url);
     const redirects = new Map([
-      ["/", "/v1/docs/"],
-      ["/index.html", "/v1/docs/"],
-      ["/docs", "/v1/docs/"],
-      ["/docs/", "/v1/docs/"],
-      ["/sitemap.xml", "/v1/docs/sitemap.xml"],
+      ["/", `/${latestVersion}/docs/`],
+      ["/index.html", `/${latestVersion}/docs/`],
+      ["/docs", `/${latestVersion}/docs/`],
+      ["/docs/", `/${latestVersion}/docs/`],
+      ["/sitemap.xml", `/${latestVersion}/docs/sitemap.xml`],
     ]);
 
     const redirectTarget = redirects.get(url.pathname);

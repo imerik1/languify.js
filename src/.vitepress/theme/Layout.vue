@@ -2,9 +2,9 @@
 // biome-ignore lint/correctness/noUnusedImports: lie
 import VPFlyout from "vitepress/dist/client/theme-default/components/VPFlyout.vue";
 import DefaultTheme from "vitepress/theme";
-import { onMounted, ref } from "vue";
+import { type AnchorHTMLAttributes, onMounted, ref } from "vue";
 
-type Item = { text: string; link: string };
+type Item = { text: string; link: string; target: AnchorHTMLAttributes["target"] };
 
 // biome-ignore lint/correctness/noUnusedVariables: is necessary
 const { Layout } = DefaultTheme;
@@ -25,6 +25,7 @@ onMounted(async () => {
     items.value.push({
       text: tag.text,
       link: `${location.protocol}//${location.host}${tag.link}`,
+      target: "_self",
     });
   }
 

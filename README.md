@@ -11,7 +11,7 @@ patterns from any ecosystem into idiomatic, typed, tree-shakeable JavaScript.
 
 Production documentation is available at:
 
-https://languifyjs.erikmarques.com.br/v1/docs/
+https://languifyjs.erikmarques.com.br
 
 ## Installation
 
@@ -92,7 +92,7 @@ The documentation site is generated with VitePress:
 pnpm docs:build
 ```
 
-The docs build writes versioned output to `dist/site/v1/docs` and then copies
+The docs build writes versioned output to `dist/site/{majorVersion}/docs` and then copies
 root-level public site files from `ci/site` into `dist/site`.
 
 ## Contributing
