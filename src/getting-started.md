@@ -95,7 +95,7 @@ error value:
 ```ts
 import { Result } from "languify.js/rust";
 
-const response = await Result.ok("saved");
+const response = Result.ok("saved");
 ```
 
 Use `Optional` when a Java-style nullable container fits the codebase:
@@ -112,3 +112,4 @@ const name = Optional.ofNullable("Grace").orElse("guest");
 - Learn [Rust Result](/rust/result) for success and failure flows.
 - Learn [Pattern matching](/rust/match) for centralized branching.
 - Learn [Java Optional](/java/optional) for Java-style nullable handling.
+- Learn [Go try](/go/try) for Go-style `[ok, err]` error handling.

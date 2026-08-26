@@ -57,7 +57,7 @@ Use `Ok` and `Err` branches for `Result` values.
 ```ts
 import { match, Result } from "languify.js/rust";
 
-const response = await Result.ok<string, string>("success");
+const response = Result.ok<string, string>("success");
 
 const output = match(response, {
   Ok: (value) => value,
@@ -71,7 +71,7 @@ console.log(output);
 ```ts
 import { match, Result } from "languify.js/rust";
 
-const response = await Result.error<string, string>("failure");
+const response = Result.error<string, string>("failure");
 
 const output = match(response, {
   Ok: () => "success",

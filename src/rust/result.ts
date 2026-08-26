@@ -11,7 +11,7 @@
  * @example
  * import { Result } from "languify.js/rust";
  *
- * const result = await Result.ok<string, string>("saved");
+ * const result = Result.ok<string, string>("saved");
  *
  * const message = result.match({
  *   Ok: (value) => `Success: ${value}`,
@@ -41,7 +41,7 @@ export type ResultMatch<T, E, U> = {
  * @example
  * import { Result } from "languify.js/rust";
  *
- * const response = await Result.ok<string, string>("created");
+ * const response = Result.ok<string, string>("created");
  *
  * const output = response.match({
  *   Ok: (value) => value.toUpperCase(),
@@ -69,7 +69,7 @@ export class Result<T, E> {
    * @example
    * import { Result } from "languify.js/rust";
    *
-   * const result = await Result.ok<string, string>("hello");
+   * const result = Result.ok<string, string>("hello");
    *
    * const output = result.match({
    *   Ok: (value) => value.toUpperCase(),
@@ -98,7 +98,7 @@ export class Result<T, E> {
    * @example
    * import { Result } from "languify.js/rust";
    *
-   * const value = (await Result.ok<string, Error>("hello")).unwrap();
+   * const value = Result.ok<string, Error>("hello").unwrap();
    *
    * console.log(value);
    * // "hello"
@@ -121,7 +121,7 @@ export class Result<T, E> {
    * @example
    * import { Result } from "languify.js/rust";
    *
-   * const value = (await Result.error<string, string>("failure")).unwrapOr("default");
+   * const value = Result.error<string, string>("failure").unwrapOr("default");
    *
    * console.log(value);
    * // "default"
@@ -142,18 +142,27 @@ export class Result<T, E> {
    *
    * @param value Successful value.
    *
-   * @returns Promise resolving to an `Ok` result.
+   * @returns An `Ok` result, or a promise resolving to one when `value` is a promise.
    *
    * @example
    * import { Result } from "languify.js/rust";
    *
-   * const result = await Result.ok<string, Error>("success");
+   * const result = Result.ok<string, Error>("success");
    *
    * console.log(result.unwrap());
    * // "success"
    */
-  static ok<T, E>(value: T) {
-    return Result.of<T, E>(Promise.resolve(value));
+  static ok<T, E>(value: PromiseLike<T>): Promise<Result<T, E>>;
+  static ok<T, E>(value: T): Result<T, E>;
+  static ok<T, E>(value: T | PromiseLike<T>): Result<T, E> | Promise<Result<T, E>> {
+    if (Result.isPromiseLike(value)) {
+      return Promise.resolve(value).then(
+        (resolvedValue) => new Result<T, E>(resolvedValue, null),
+        (error) => new Result<T, E>(null, error as E)
+      );
+    }
+
+    return new Result<T, E>(value, null);
   }
 
   /**
@@ -164,12 +173,12 @@ export class Result<T, E> {
    *
    * @param value Error value.
    *
-   * @returns Promise resolving to an `Err` result.
+   * @returns An `Err` result, or a promise resolving to one when `value` is a promise.
    *
    * @example
    * import { Result } from "languify.js/rust";
    *
-   * const result = await Result.error<string, string>("failure");
+   * const result = Result.error<string, string>("failure");
    *
    * const value = result.match({
    *   Ok: () => "success",
@@ -179,27 +188,31 @@ export class Result<T, E> {
    * console.log(value);
    * // "failure"
    */
-  static error<T, E>(value: E) {
-    return Result.of<T, E>(Promise.reject(value));
+  static error<T, E>(value: PromiseLike<E>): Promise<Result<T, E>>;
+  static error<T, E>(value: E): Result<T, E>;
+  static error<T, E>(value: E | PromiseLike<E>): Result<T, E> | Promise<Result<T, E>> {
+    if (Result.isPromiseLike(value)) {
+      return Promise.resolve(value).then(
+        (resolvedValue) => new Result<T, E>(null, resolvedValue),
+        (error) => new Result<T, E>(null, error as E)
+      );
+    }
+
+    return new Result<T, E>(null, value);
   }
 
   /**
-   * Internal helper for creating a result from an execution.
+   * Checks whether a value can be awaited.
    *
-   * Resolves to `Ok` on success and `Err` on failure.
+   * @param value Value to inspect.
    *
-   * @template T Success value type.
-   * @template E Error value type.
-   *
-   * @param execution Async execution.
-   *
-   * @returns Result promise.
+   * @returns Whether `value` is a promise or thenable.
    */
-  private static async of<T, E>(execution: Promise<T>): Promise<Result<T | null, E>> {
-    try {
-      return new Result<T, E>(await execution, null);
-    } catch (err) {
-      return new Result<T, E>(null, err as E);
-    }
+  private static isPromiseLike<T>(value: T | PromiseLike<T>): value is PromiseLike<T> {
+    return (
+      value !== null &&
+      (typeof value === "object" || typeof value === "function") &&
+      typeof (value as PromiseLike<T>).then === "function"
+    );
   }
 }

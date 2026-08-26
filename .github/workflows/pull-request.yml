@@ -45,3 +45,6 @@ jobs:
 
       - name: Validate version tag
         run: pnpm tag:validate
+        env:
+          SOURCE_BRANCH: ${{ github.head_ref }}
+          TARGET_BRANCH: ${{ github.base_ref }}

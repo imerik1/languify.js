@@ -57,6 +57,11 @@ const PAGE_SEO: Record<string, SeoEntry> = {
     description:
       "Use the Java-inspired NullPointerException helper when a JavaScript or TypeScript operation requires a non-null value.",
   },
+  "go/try.md": {
+    title: "Go Try for JavaScript",
+    description:
+      "Use Go-style [ok, err] tuples in JavaScript and TypeScript, with synchronous and asynchronous functions handled naturally.",
+  },
 };
 
 const normalizedRelativePath = (relativePath: string) => {
@@ -227,6 +232,10 @@ export default defineConfig({
           { text: "Optional", link: "/java/optional" },
           { text: "Exception", link: "/java/exception" },
         ],
+      },
+      {
+        text: "Go-inspired",
+        items: [{ text: "Try", link: "/go/try" }],
       },
     ],
     socialLinks: [

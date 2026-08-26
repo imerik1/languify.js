@@ -1,6 +1,6 @@
 {
   "name": "languify.js",
-  "version": "1.0.10",
+  "version": "2.0.0",
   "description": "Extensible language-inspired utilities for JavaScript and TypeScript.",
   "type": "module",
   "keywords": [
@@ -36,6 +36,11 @@
     "url": "git+https://github.com/imerik1/languify.js.git"
   },
   "exports": {
+    "./go": {
+      "types": "./dist/lib/go.d.ts",
+      "import": "./dist/lib/go.mjs",
+      "require": "./dist/lib/go.cjs"
+    },
     "./rust": {
       "types": "./dist/lib/rust.d.ts",
       "import": "./dist/lib/rust.mjs",
