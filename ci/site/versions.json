@@ -2,5 +2,9 @@
   {
     "text": "v1",
     "link": "/v1/docs/"
+  },
+  {
+    "text": "v2",
+    "link": "/v2/docs/"
   }
 ]
