@@ -59,6 +59,17 @@ body {
   border-bottom: 1px solid var(--vp-c-border);
 }
 
+/* Keep the mobile table of contents anchored to and above the local nav. */
+@media (max-width: 1279px) {
+  .VPLocalNavOutlineDropdown {
+    position: relative;
+  }
+
+  .VPLocalNavOutlineDropdown .items {
+    z-index: 1;
+  }
+}
+
 /* =========================
    SIDEBAR
 ========================= */
